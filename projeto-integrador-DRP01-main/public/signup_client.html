@@ -8,7 +8,10 @@
   </head>
   <body>
     <header>
-      <div><strong>FOTECTA</strong></div>
+      <div class="brand-wrap">
+        <span class="brand-avatar"></span>
+        <div class="brand">FOTECTA</div>
+      </div>
       <nav>
         <a href="/">Home</a>
         <a href="/login">Login</a>
@@ -16,14 +19,23 @@
       </nav>
     </header>
 
-    <main>
-      <div class="card" style="max-width: 500px; margin: 3rem auto;">
+    <main class="auth-shell">
+      <div class="auth-card">
         <h2>Cadastro de cliente</h2>
         <div id="message" class="message"></div>
         <form id="register-form">
-          <label>Nome<input id="nome" type="text" required /></label>
-          <label>E-mail<input id="email" type="email" required /></label>
-          <label>Senha<input id="senha" type="password" required /></label>
+          <label>
+            Nome
+            <input id="nome" type="text" placeholder="Seu nome" required />
+          </label>
+          <label>
+            E-mail
+            <input id="email" type="email" placeholder="seu@email.com" required />
+          </label>
+          <label>
+            Senha
+            <input id="senha" type="password" placeholder="Crie uma senha" required />
+          </label>
           <input type="hidden" id="tipo" value="cliente" />
           <button type="submit">Criar conta</button>
         </form>

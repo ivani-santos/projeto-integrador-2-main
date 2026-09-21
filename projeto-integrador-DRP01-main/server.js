@@ -258,11 +258,17 @@ app.get('/clientelogado', (req, res) => res.sendFile(path.join(rootDir, 'public'
 app.get('/fotografologado', (req, res) => res.sendFile(path.join(rootDir, 'public', 'fotografologado.html')));
 app.get('/busca', (req, res) => res.sendFile(path.join(rootDir, 'public', 'busca.html')));
 app.get('/signup-client', (req, res) => res.sendFile(path.join(rootDir, 'public', 'signup_client.html')));
+app.get('/signup_client', (req, res) => res.sendFile(path.join(rootDir, 'public', 'signup_client.html')));
 app.get('/signup-fotografo', (req, res) => res.sendFile(path.join(rootDir, 'public', 'signup_fotografo.html')));
+app.get('/signup_fotografo', (req, res) => res.sendFile(path.join(rootDir, 'public', 'signup_fotografo.html')));
 app.get('/perfil-publico', (req, res) => res.sendFile(path.join(rootDir, 'public', 'perfil_publico.html')));
+app.get('/perfil_publico', (req, res) => res.sendFile(path.join(rootDir, 'public', 'perfil_publico.html')));
 app.get('/perfil-cliente', (req, res) => res.sendFile(path.join(rootDir, 'public', 'perfil_cliente.html')));
+app.get('/perfil_cliente', (req, res) => res.sendFile(path.join(rootDir, 'public', 'perfil_cliente.html')));
 app.get('/perfil-prof', (req, res) => res.sendFile(path.join(rootDir, 'public', 'perfil_prof.html')));
+app.get('/perfil_prof', (req, res) => res.sendFile(path.join(rootDir, 'public', 'perfil_prof.html')));
 app.get('/editar-perfil', (req, res) => res.sendFile(path.join(rootDir, 'public', 'editar_perfil.html')));
+app.get('/editar_perfil', (req, res) => res.sendFile(path.join(rootDir, 'public', 'editar_perfil.html')));
 
 app.get('/api/me', (req, res) => {
   const user = currentUser(req);

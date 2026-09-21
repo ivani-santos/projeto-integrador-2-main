@@ -606,6 +606,82 @@ textarea {
   padding: 2rem;
 }
 
+.about-card,
+.faq-card {
+  margin-top: 1.5rem;
+}
+
+.about-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.about-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.about-text {
+  margin-top: 1.4rem;
+  color: var(--fotecta-text);
+  line-height: 1.9;
+  font-size: 1.02rem;
+}
+
+.about-editing {
+  background: white;
+  border: 1px solid var(--fotecta-border);
+  border-radius: 12px;
+  padding: 1rem;
+  outline: none;
+}
+
+.faq-card h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--fotecta-primary-dark);
+}
+
+.faq-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.faq-item {
+  border: 1px solid var(--fotecta-border);
+  border-radius: 14px;
+  background: #f9fbff;
+  overflow: hidden;
+}
+
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 1rem 1.1rem;
+  font-weight: 700;
+  color: var(--fotecta-primary-dark);
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-answer {
+  padding: 0 1.1rem 1rem;
+  color: var(--fotecta-muted);
+  line-height: 1.8;
+}
+
+.faq-answer code {
+  background: #eef4ff;
+  color: #1d4ed8;
+  padding: 0.15rem 0.35rem;
+  border-radius: 6px;
+}
+
 .story-header h1 {
   margin: 1rem 0 0;
   font-size: clamp(2rem, 3vw, 3rem);
@@ -646,6 +722,10 @@ textarea {
   padding-left: 1.1rem;
   color: var(--fotecta-text);
   line-height: 1.9;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .search-shell,

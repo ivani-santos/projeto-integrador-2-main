@@ -21,31 +21,91 @@
     </header>
 
     <main class="page-shell story-shell">
-      <div class="story-card">
-        <div class="story-header">
+      <div class="story-card about-card">
+        <div class="story-header about-header">
           <div>
             <span class="pill">Nossa missão</span>
-            <h1>Conectar pessoas, histórias e momentos.</h1>
+            <h1>Sobre o Projeto</h1>
+          </div>
+          <div class="about-actions">
+            <button id="btnEditarSobre" class="secondary hidden" type="button">Editar Texto</button>
+            <button id="btnSalvarSobre" class="hidden" type="button">Salvar</button>
           </div>
         </div>
 
-        <div class="story-grid">
-          <div class="story-copy">
-            <p>O FOTECTA nasceu para simplificar a relação entre clientes e fotógrafos, criando um ambiente organizado, acolhedor e objetivo desde o primeiro contato até o agendamento.</p>
-            <p>A plataforma reúne ferramentas de busca, autenticação, favoritos, perfis públicos e painéis diferenciados para cada tipo de usuário.</p>
-          </div>
+        <div id="textoSobreNos" class="about-text">
+          Este projeto foi criado em 2026 pelo Grupo 9 da turma de TI da UNIVESP. Grupo composto pelos alunos: Gabriela Sampaio da Silva, Gustavo Santos Lima de Oliveira, Ivani Santos André, Jacqueline Santana Nascimento Benevides, Leonardo Quaresma da Silva, Maria José de Sousa, Rodolfo Felix de Azevedo e Victor Gabriel Santos Magalhães.
+        </div>
+      </div>
 
-          <div class="story-panel">
-            <h3>O que a plataforma oferece</h3>
-            <ul>
-              <li>Busca por fotógrafos por estilo e localização</li>
-              <li>Perfis públicos com detalhes essenciais</li>
-              <li>Fluxo de login e cadastro com papéis distintos</li>
-              <li>Painéis específicos para cliente, fotógrafo e administrador</li>
-            </ul>
-          </div>
+      <div class="story-card faq-card">
+        <h2>Dúvidas Frequentes (FAQ)</h2>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Esqueci minha senha, como recupero?</summary>
+            <div class="faq-answer">
+              Caso você erre a senha 3 vezes seguidas na tela de Login, o sistema será bloqueado temporariamente por segurança. Você será direcionado para uma página onde deverá informar seu e-mail e sua <strong>Data de Nascimento</strong>. O administrador avaliará sua solicitação e, após aprovada, sua senha retornará para <code>fotecta123</code>. Recomendamos trocá-la assim que acessar a conta novamente!
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Como entro em contato com um Fotógrafo/Cliente?</summary>
+            <div class="faq-answer">
+              A plataforma FOTECTA permite que você encontre os profissionais, visualize o portfólio completo, e clique no botão <strong>Entrar em Contato</strong>. Isso abrirá automaticamente o seu aplicativo de e-mail padrão para você iniciar a conversa diretamente com o profissional. Fotógrafos também possuem acesso às redes sociais cadastradas e WhatsApp nos perfis públicos.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Como funciona o sistema de avaliações?</summary>
+            <div class="faq-answer">
+              Clientes que marcam fotógrafos como Favoritos (❤️) podem deixar depoimentos e notas (de 1 a 5 estrelas). Essas notas constroem a média do profissional na página de busca. O fotógrafo, por sua vez, pode ler e responder as avaliações diretamente pela <em>dashboard</em> (Painel) de controle dele.
+            </div>
+          </details>
         </div>
       </div>
     </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const textoSobreNos = document.getElementById('textoSobreNos');
+        const btnEditarSobre = document.getElementById('btnEditarSobre');
+        const btnSalvarSobre = document.getElementById('btnSalvarSobre');
+
+        if (!textoSobreNos || !btnEditarSobre || !btnSalvarSobre) return;
+
+        const savedText = localStorage.getItem('fotecta_sobrenos_text');
+        if (savedText) {
+          textoSobreNos.innerHTML = savedText;
+        }
+
+        try {
+          const response = await fetch('/api/me', { credentials: 'same-origin' });
+          const data = await response.json();
+
+          if (data && data.user && data.user.tipo === 'admin') {
+            btnEditarSobre.classList.remove('hidden');
+
+            btnEditarSobre.addEventListener('click', () => {
+              textoSobreNos.setAttribute('contenteditable', 'true');
+              textoSobreNos.classList.add('about-editing');
+              textoSobreNos.focus();
+              btnEditarSobre.classList.add('hidden');
+              btnSalvarSobre.classList.remove('hidden');
+            });
+
+            btnSalvarSobre.addEventListener('click', () => {
+              textoSobreNos.removeAttribute('contenteditable');
+              textoSobreNos.classList.remove('about-editing');
+              localStorage.setItem('fotecta_sobrenos_text', textoSobreNos.innerHTML);
+              btnSalvarSobre.classList.add('hidden');
+              btnEditarSobre.classList.remove('hidden');
+            });
+          }
+        } catch (error) {
+          console.error('Erro ao verificar usuário admin:', error);
+        }
+      });
+    </script>
   </body>
 </html>
