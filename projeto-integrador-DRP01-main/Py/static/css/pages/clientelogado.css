@@ -1,0 +1,30 @@
+.search-max-250 {
+    max-width: 250px;
+}
+
+.avatar-card-md {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ddd;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.avatar-card-sm {
+    width: 40px;
+    height: 40px;
+    background-color: #ddd;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.portfolio-mini {
+    padding-top: 100%;
+    background-color: #f0f0f0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

@@ -1,0 +1,79 @@
+.search-group {
+    max-width: 600px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.portfolio-thumb {
+    padding-top: 100%;
+    background-color: #f0f0f0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.nota-small {
+    font-size: 0.8rem;
+}
+
+.bio-preview {
+    line-height: 1.4;
+}
+
+.btn-favoritar-floating {
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+}
+
+/* Visual distinto para o botão de favoritar quando desabilitado */
+.btn-favoritar[disabled], .btn-favoritar.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+.btn-favoritar[disabled] i, .btn-favoritar.disabled i {
+    color: #adb5bd !important; /* cinza */
+}
+
+.avatar-card {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ddd;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Mobile tooltip nudging and sizing for better visibility */
+@media (max-width: 576px) {
+    .tooltip {
+        z-index: 2050; /* above most elements */
+    }
+    .tooltip.bs-tooltip-top {
+        transform: translateY(-8px) !important; /* nudge tooltip slightly above */
+    }
+    .tooltip .tooltip-inner {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.5rem;
+        max-width: 220px;
+        text-align: center;
+    }
+    .btn-favoritar {
+        touch-action: manipulation; /* improve touch responsiveness */
+    }
+}
+
+/* Smooth fade + slide transition for tooltips */
+.tooltip {
+    transition: opacity 180ms ease, transform 180ms cubic-bezier(.2,.8,.2,1);
+}
+.tooltip.show {
+    opacity: 1;
+}
+.tooltip .tooltip-inner {
+    transition: inherit;
+}

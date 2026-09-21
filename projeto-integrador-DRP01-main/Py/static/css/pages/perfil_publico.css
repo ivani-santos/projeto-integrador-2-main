@@ -1,0 +1,13 @@
+.perfil-foto {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: #ddd;
+}
+
+.portfolio-thumb {
+    padding-top: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

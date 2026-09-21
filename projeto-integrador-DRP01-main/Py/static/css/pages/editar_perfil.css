@@ -1,0 +1,15 @@
+.perfil-avatar-preview {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #ddd;
+}
+
+.toast-z {
+    z-index: 1055;
+}
+
+.progress-w-0 {
+    width: 0%;
+}

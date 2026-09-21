@@ -1,0 +1,9 @@
+[run]
+# Ignora pastas ou arquivos específicos no relatório de cobertura
+omit =
+    Py/config.py
+    Py/models.py
+    Py/local_store.py
+    tests/*
+    Py/templates/errors/test_*.py
+    venv/*

@@ -1,0 +1,20 @@
+{
+  "name": "fotecta-javascript",
+  "version": "1.0.0",
+  "description": "Versão em JavaScript do projeto FOTECTA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "sql.js": "^1.13.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}

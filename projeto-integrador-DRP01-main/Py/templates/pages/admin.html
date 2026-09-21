@@ -1,0 +1,235 @@
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+	<div class="container py-4">
+		<h1 class="h3 fw-bold mb-3">Painel Admin</h1>
+		<p id="adminUser" class="text-muted mb-4">Gestão de todos os usuários da plataforma: clientes e fotógrafos.</p>
+
+		<div class="row g-3 mb-4">
+			<div class="col-md-4"><div class="box p-4"><div class="small text-muted">Usuários totais</div><div id="metricTotal" class="h4 mb-0">0</div></div></div>
+			<div class="col-md-4"><div class="box p-4"><div class="small text-muted">Clientes</div><div id="metricClientes" class="h4 mb-0">0</div></div></div>
+			<div class="col-md-4"><div class="box p-4"><div class="small text-muted">Fotógrafos</div><div id="metricFotografos" class="h4 mb-0">0</div></div></div>
+		</div>
+
+		<!-- Painel de Logs de Atualização de Perfil -->
+		<div class="box p-4 mt-4 mb-4 shadow-sm border-0 rounded">
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<h2 class="h5 fw-bold mb-0"><i class="fa-solid fa-list-check me-2"></i>Últimas 5 Atualizações de Perfil</h2>
+				<div>
+					<button id="btnAtualizarLogs" class="btn btn-sm btn-outline-dark"><i class="fa-solid fa-arrows-rotate me-1"></i>Atualizar Logs</button>
+					<button id="btnLimparLogs" class="btn btn-sm btn-outline-danger ms-1" title="Apagar Histórico"><i class="fa-solid fa-trash"></i></button>
+				</div>
+			</div>
+			<ul id="logList" class="list-group list-group-flush small">
+				<li class="list-group-item text-muted">Carregando logs...</li>
+			</ul>
+		</div>
+
+		<!-- Filtro Rápido em Tempo Real -->
+		<div class="box p-4 mt-4 mb-4 shadow-sm border-0 rounded">
+			<h2 class="h5 fw-bold mb-3"><i class="fa-solid fa-magnifying-glass me-2"></i>Busca Rápida de Usuários</h2>
+			<input type="text" id="filtroRapidoAdmin" class="form-control" placeholder="Digite um nome ou e-mail para filtrar a tabela instantaneamente...">
+		</div>
+
+		<section class="box p-3 p-md-4 mb-4">
+			<h2 class="h5 mb-3">Cadastrar novo usuário</h2>
+			<form id="novoUsuarioForm" class="row g-2">
+				<div class="col-md-3"><input id="novoNome" class="form-control" placeholder="Nome" required></div>
+				<div class="col-md-3"><input id="novoEmail" type="email" class="form-control" placeholder="Email" required></div>
+				<div class="col-md-2"><input id="novaSenha" class="form-control" placeholder="Senha" required></div>
+				<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+		buscaUsuarios.addEventListener('input', render);
+		filtroButtons.todos.addEventListener('click', () => setFiltro('todos'));
+		filtroButtons.cliente.addEventListener('click', () => setFiltro('cliente'));
+		filtroButtons.fotografo.addEventListener('click', () => setFiltro('fotografo'));
+		filtroButtons.admin.addEventListener('click', () => setFiltro('admin'));
+
+		usuariosBody.addEventListener('click', (e) => {
+			const btn = e.target.closest('button');
+			if (!btn) return;
+
+			const id = btn.getAttribute('data-id');
+			const action = btn.getAttribute('data-action');
+
+			if (action === 'toggle-senha') {
+				if (isFixedUserId(id)) {
+					mostrarMensagem('Senha de conta fixa nunca é exibida.', true);
+					return;
+				}
+
+				if (senhaRevelada.has(id)) {
+					senhaRevelada.delete(id);
+					render();
+					return;
+				}
+
+				userIdParaRevelar = id;
+				senhaAdminModal.value = '';
+				senhaAdminModalMsg.textContent = '';
+				modalVerSenha.show();
+				setTimeout(() => senhaAdminModal.focus(), 150);
+				return;
+			}
+
+			if (action === 'excluir') {
+				userIdParaExcluir = id;
+				const nome = document.querySelector(`[data-id="${id}"][data-field="nome"]`).value;
+				nomeUsuarioExcluir.textContent = nome;
+				modalExcluir.show();
+				return;
+			}
+
+			if (action === 'salvar') {
+				const nome = document.querySelector(`[data-id="${id}"][data-field="nome"]`).value;
+				const tipo = document.querySelector(`[data-id="${id}"][data-field="tipo"]`).value;
+				const email = document.querySelector(`[data-id="${id}"][data-field="email"]`).value;
+				const novaSenhaEl = document.querySelector(`[data-id="${id}"][data-field="novaSenha"]`);
+				const novaSenha = novaSenhaEl ? novaSenhaEl.value.trim() : '';
+
+				const payload = { nome, tipo, email };
+				if (novaSenha) payload.senha = novaSenha;
+
+				const result = window.Auth.updateUser(id, payload);
+				if (!result.ok) {
+					mostrarMensagem(result.message, true);
+					return;
+				}
+				senhaRevelada.delete(id);
+				mostrarMensagem('Usuário atualizado com sucesso.', false);
+				render();
+			}
+		});
+
+		btnConfirmarVerSenha.addEventListener('click', () => {
+			if (!userIdParaRevelar) return;
+			const check = window.Auth.verifyAdminPassword((senhaAdminModal.value || '').trim());
+			if (!check.ok) {
+				senhaAdminModalMsg.textContent = check.message;
+				return;
+			}
+			senhaRevelada.add(userIdParaRevelar);
+			userIdParaRevelar = null;
+			senhaAdminModal.value = '';
+			senhaAdminModalMsg.textContent = '';
+			modalVerSenha.hide();
+			render();
+		});
+
+		senhaAdminModal.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				btnConfirmarVerSenha.click();
+			}
+		});
+
+		modalVerSenhaEl.addEventListener('hidden.bs.modal', () => {
+			userIdParaRevelar = null;
+			senhaAdminModal.value = '';
+			senhaAdminModalMsg.textContent = '';
+		});
+
+		btnConfirmarExclusao.addEventListener('click', () => {
+			if (!userIdParaExcluir) return;
+			const result = window.Auth.deleteUser(userIdParaExcluir);
+			modalExcluir.hide();
+			
+			if (!result.ok) {
+				mostrarMensagem(result.message, true);
+				return;
+			}
+			mostrarMensagem('Usuário removido com sucesso.', false);
+			render();
+		});
+
+		resetsBody.addEventListener('click', (e) => {
+			const btn = e.target.closest('button');
+			if (!btn) return;
+			const action = btn.getAttribute('data-action');
+			const email = btn.getAttribute('data-email');
+
+			if (action === 'aprovar-reset') {
+				window.Auth.approveReset(email);
+				mostrarMensagem('Senha de ' + email + ' resetada para fotecta123.', false);
+				renderResets();
+				render();
+			} else if (action === 'reprovar-reset') {
+				window.Auth.rejectReset(email);
+				mostrarMensagem('Solicitação de ' + email + ' reprovada.', false);
+				renderResets();
+			}
+		});
+
+		btnLogout.addEventListener('click', async () => {
+			try { await window.Auth.logout(); } catch(e) {}
+			window.location.href = '/login';
+		});
+
+		resetLogins.addEventListener('click', () => {
+			window.Auth.resetSeed();
+			window.location.href = '/login';
+		});
+
+		setFiltro('todos');
+		renderResets();
+
+		// Lógica do Painel de Logs
+		async function carregarLogs() {
+			const btn = document.getElementById('btnAtualizarLogs');
+			if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i>Atualizando...';
+			
+			try {
+				const res = await fetch('/api/admin/logs');
+				const data = await res.json();
+				const logList = document.getElementById('logList');
+				if (data.ok && data.logs.length > 0) {
+					logList.innerHTML = data.logs.map(log => `<li class="list-group-item font-monospace text-secondary">${log}</li>`).join('');
+				} else {
+					logList.innerHTML = '<li class="list-group-item text-muted">Nenhum registro recente encontrado.</li>';
+				}
+			} catch (error) {
+				console.error("Erro ao carregar logs", error);
+			} finally {
+				if (btn) btn.innerHTML = '<i class="fa-solid fa-arrows-rotate me-1"></i>Atualizar Logs';
+			}
+		}
+		carregarLogs();
+		document.getElementById('btnAtualizarLogs').addEventListener('click', carregarLogs);
+
+		document.getElementById('btnLimparLogs').addEventListener('click', async () => {
+			if (!confirm('Tem certeza que deseja apagar todo o histórico de logs? Essa ação não pode ser desfeita.')) return;
+			try {
+				const res = await fetch('/api/admin/logs', { method: 'DELETE' });
+				const data = await res.json();
+				if (data.ok) {
+					mostrarMensagem(data.message || 'Histórico apagado com sucesso.', false);
+					carregarLogs();
+				} else {
+					mostrarMensagem(data.message || 'Falha ao apagar o histórico.', true);
+				}
+			} catch (error) {
+				console.error("Erro ao limpar logs", error);
+			}
+		});
+
+		// Lógica do Filtro Rápido em Tempo Real (Front-end)
+		const filtroRapido = document.getElementById('filtroRapidoAdmin');
+		if (filtroRapido) {
+			filtroRapido.addEventListener('input', function(e) {
+				const termo = e.target.value.toLowerCase();
+				const usuariosBody = document.getElementById('usuariosBody');
+				if (usuariosBody) {
+					const linhas = usuariosBody.querySelectorAll('tr, .usuario-card, li');
+					linhas.forEach(linha => {
+						const conteudo = linha.textContent.toLowerCase();
+						linha.style.display = conteudo.includes(termo) ? '' : 'none';
+					});
+				}
+			});
+		}
+	}
+</script>
+{% endblock %}

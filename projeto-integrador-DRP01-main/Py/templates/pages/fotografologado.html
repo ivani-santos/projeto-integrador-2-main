@@ -1,0 +1,118 @@
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/fotografologado.css') }}">
+{% endblock %}
+
+{% block content %}
+	<div class="container py-4">
+		<div class="box p-4 p-md-5 mb-4">
+			<h1 class="h3 fw-bold mb-2">Área do Fotógrafo</h1>
+			<p id="fotografoInfo" class="text-muted mb-4">Você está logado como fotógrafo.</p>
+			<div class="d-flex flex-wrap gap-2">
+				<a class="btn btn-dark" href="{{ url_for('busca') }}">Ver meu perfil na busca</a>
+				<button id="logoutFotografo" class="btn btn-outline-dark" type="button">Sair</button>
+			</div>
+
+			<div class="row g-3 mt-3">
+				<div class="col-md-5 col-lg-4">
+					<div class="p-3 border rounded bg-light d-flex align-items-center justify-content-between">
+						<div class="small fw-semibold text-muted mb-0">Cliques no WhatsApp</div>
+						<div class="fs-4 fw-bold text-success"><i class="fa-brands fa-whatsapp me-2"></i><span id="metricWhatsapp">0</span></div>
+					</div>
+				</div>
+				<div class="col-md-5 col-lg-4">
+					<div class="p-3 border rounded bg-light d-flex align-items-center justify-content-between">
+						<div class="small fw-semibold text-muted mb-0">Vezes favoritado</div>
+						<div class="fs-4 fw-bold text-danger"><i class="fa-solid fa-heart me-2"></i><span id="metricFavoritos">0</span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Seção de Portfólio -->
+		<section class="box p-4 p-md-5 mb-4">
+			<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+				<h2 class="h4 fw-bold mb-0">Meu Portfólio</h2>
+				<label id="btnUploadLabel" class="btn btn-dark">
+					<i class="fa-solid fa-plus me-2"></i>Adicionar Fotos
+					<input type="file" id="uploadPortfolio" class="d-none" accept="image/*" multiple>
+				</label>
+			</div>
+			
+			<div id="galeriaPortfolio" class="row g-3 mb-2">
+				<!-- As fotos renderizadas via JS entrarão aqui -->
+			</div>
+			<p id="msgSemFotos" class="text-muted small mt-3 mb-0 d-none">Você ainda não adicionou fotos ao seu portfólio.</p>
+			<p id="contadorFotos" class="text-muted small mb-0 text-end">0/5 fotos permitidas</p>
+		</section>
+
+		<!-- Avaliações -->
+		<section class="box p-4 p-md-5 mb-4">
+			<h2 class="h5 fw-bold mb-3">Minhas Avaliações</h2>
+			<div id="listaAvaliacoes" class="d-flex flex-column gap-3"></div>
+		</section>
+
+		<!-- Clientes em Potencial -->
+		<section class="box p-4 p-md-5 mb-4">
+			<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+				<h2 class="h5 fw-bold mb-0">Clientes em Potencial</h2>
+				<input type="text" id="buscaClientes" class="form-control form-control-sm search-max-250" placeholder="Filtrar por interesses...">
+			</div>
+			<div id="listaClientes" class="row g-4"></div>
+		</section>
+	</div>
+
+	<!-- Modal de Resposta de Avaliação -->
+	<div class="modal fade" id="modalResponder" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Responder Avaliação</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-2">Comentário do cliente:</p>
+					<blockquote class="border-start border-3 px-3 py-2 bg-light small" id="comentarioClienteText"></blockquote>
+					<label class="form-label small fw-semibold mt-3">Sua Resposta</label>
+					<textarea id="textoResposta" class="form-control" rows="3" maxlength="300" placeholder="Escreva um agradecimento ou resposta... (Máx: 300 caracteres)"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-dark" id="btnSalvarResposta">Enviar Resposta</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Toast de Notificação -->
+	<div class="toast-container position-fixed top-0 end-0 p-3 toast-z">
+		<div id="fotografoToast" class="toast align-items-center border-0 text-white shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+			<div class="d-flex">
+				<div class="toast-body fw-medium px-3 py-2" id="toastMessage"></div>
+				<button type="button" class="btn-close btn-close-white me-3 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/fotografologado.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const updateMetrics = () => {
+            const user = window.Auth ? window.Auth.currentUser() : null;
+            const metricWhatsappEl = document.getElementById('metricWhatsapp');
+            const metricFavoritosEl = document.getElementById('metricFavoritos');
+            if (user) {
+                if (metricWhatsappEl) metricWhatsappEl.textContent = user.whatsapp_clicks || 0;
+                if (metricFavoritosEl) metricFavoritosEl.textContent = user.favorited_by_count || 0;
+            }
+        };
+        
+        // Preenche o valor na primeira carga e sempre que o usuário for atualizado
+        updateMetrics();
+        window.addEventListener('fotecta:user-updated', updateMetrics);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Admin | FOTECTA</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand-wrap">
+        <span class="brand-avatar"></span>
+        <div class="brand">FOTECTA</div>
+      </div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/admin">Admin</a>
+        <button class="secondary" onclick="fetch('/logout',{method:'POST',credentials:'same-origin'}).then(()=>window.location.href='/')">Sair</button>
+      </nav>
+    </header>
+
+    <main class="dashboard-shell">
+      <div class="dashboard-header">
+        <div>
+          <h1>Painel do administrador</h1>
+          <p id="user-name">Carregando...</p>
+        </div>
+        <button onclick="fetch('/api/admin/reset-seed',{method:'POST',credentials:'same-origin'}).then(r=>r.json()).then(()=>location.reload())">Resetar dados demo</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="metric-card">
+          <div class="label">Usuários totais</div>
+          <strong>3</strong>
+        </div>
+        <div class="metric-card">
+          <div class="label">Clientes</div>
+          <strong>1</strong>
+        </div>
+        <div class="metric-card">
+          <div class="label">Fotógrafos</div>
+          <strong>1</strong>
+        </div>
+        <div class="metric-card">
+          <div class="label">Solicitações</div>
+          <strong>0</strong>
+        </div>
+      </div>
+
+      <section class="dashboard-panel">
+        <h2>Resumo da plataforma</h2>
+        <div class="summary-box">
+          <strong>Gestão centralizada de usuários e contas</strong>
+          <p>Monitore o volume de clientes, fotógrafos e solicitações de recuperação de senha em um único painel.</p>
+        </div>
+        <div class="inline-actions">
+          <button>Exportar relatório</button>
+          <button class="secondary">Ver usuários</button>
+        </div>
+      </section>
+
+      <section class="dashboard-panel">
+        <h2>Últimas ações</h2>
+        <div class="stack-list">
+          <div class="list-item">
+            <strong>Cliente Demo</strong>
+            <span class="status-badge success">Ativo</span>
+          </div>
+          <div class="list-item">
+            <strong>Fotógrafo Demo</strong>
+            <span class="status-badge success">Ativo</span>
+          </div>
+          <div class="list-item">
+            <strong>Admin Demo</strong>
+            <span class="status-badge warning">Gerente</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-panel">
+        <h2>Solicitações de recuperação</h2>
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cliente Demo</td>
+                <td>cliente@fotecta.com</td>
+                <td><span class="status-badge warning">Pendente</span></td>
+              </tr>
+              <tr>
+                <td>Fotógrafo Demo</td>
+                <td>fotografo@fotecta.com</td>
+                <td><span class="status-badge success">Aprovado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+.about-wrap {
+    min-height: 62vh;
+    display: grid;
+    place-items: center;
+}
+
+.about-box {
+    max-width: 780px;
+}
+
+.about-text {
+    outline: none;
+    text-align: left;
+}

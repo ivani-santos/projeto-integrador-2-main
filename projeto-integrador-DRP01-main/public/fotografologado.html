@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel do Fotógrafo | FOTECTA</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand-wrap">
+        <span class="brand-avatar"></span>
+        <div class="brand">FOTECTA</div>
+      </div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/fotografologado">Área do fotógrafo</a>
+        <button class="secondary" onclick="fetch('/logout',{method:'POST',credentials:'same-origin'}).then(()=>window.location.href='/')">Sair</button>
+      </nav>
+    </header>
+
+    <main class="dashboard-shell">
+      <div class="dashboard-header">
+        <div>
+          <h1>Painel do fotógrafo</h1>
+          <p id="user-name">Carregando...</p>
+        </div>
+        <button>Editar perfil</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="metric-card">
+          <div class="label">Visualizações</div>
+          <strong>1.2k</strong>
+        </div>
+        <div class="metric-card">
+          <div class="label">Avaliações</div>
+          <strong>4.9</strong>
+        </div>
+        <div class="metric-card">
+          <div class="label">Pedidos</div>
+          <strong>14</strong>
+        </div>
+        <div class="metric-card">
+          <div class="label">Resposta</div>
+          <strong>12 min</strong>
+        </div>
+      </div>
+
+      <section class="dashboard-panel">
+        <h2>Atendimento recente</h2>
+        <div class="stack-list">
+          <div class="list-item">
+            <strong>Maria Oliveira</strong>
+            <span class="status-badge success">Respondido</span>
+          </div>
+          <div class="list-item">
+            <strong>Bruno Santos</strong>
+            <span class="status-badge warning">Em análise</span>
+          </div>
+          <div class="list-item">
+            <strong>Fernanda Lima</strong>
+            <span class="status-badge success">Concluído</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-panel">
+        <h2>Desempenho da semana</h2>
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Semana</th>
+                <th>Pedidos</th>
+                <th>Avaliação</th>
+                <th>Conversão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>4.8</td>
+                <td>62%</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>5</td>
+                <td>4.9</td>
+                <td>71%</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>6</td>
+                <td>5.0</td>
+                <td>78%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Cadastro Cliente - FOTECTA: Como conectar fotógrafos com novos clientes{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 mt-3">
+            <!-- Cabecalho do Card para destaque visual do Cliente -->
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0">Novo Cadastro para Clientes</h4>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Endereço de E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="exemplo@email.com" required />
+                    </div>
+                    
+                    <!-- Divisão em colunas para os nomes economiza espaço vertical -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">Primeiro Nome</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="José" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label">Sobrenome</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Da Silva" required />
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Crie uma Senha</label>
+                        <input type="password" class="form-control" id="password1" name="password1" placeholder="Mínimo de 6 caracteres" required />
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password2" class="form-label">Confirme sua Senha</label>
+                        <input type="password" class="form-control" id="password2" name="password2" placeholder="Repita a senha" required />
+                    </div>
+                    
+                    <!-- Botão estendido por todo o form -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Criar Conta para Cliente</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

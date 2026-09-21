@@ -1,0 +1,21 @@
+.search-max-250 {
+    max-width: 250px;
+}
+
+.toast-z {
+    z-index: 1055;
+}
+
+.portfolio-tile {
+    padding-top: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.delete-photo-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    line-height: 1;
+}

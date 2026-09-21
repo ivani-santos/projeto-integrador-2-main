@@ -1,0 +1,288 @@
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/cadastro.css') }}">
+{% endblock %}
+
+{% block content %}
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-9">
+				<section class="box p-4 p-md-5">
+					<h1 class="h3 fw-bold mb-2">Cadastro</h1>
+					<p class="text-muted mb-3">Preencha em etapas para facilitar.</p>
+
+					<div class="mb-4">
+						<div class="d-flex justify-content-between small mb-2"><span id="stepLabel">Etapa 1 de 3</span><span id="stepName">Perfil</span></div>
+						<div class="progress"><div id="progressBar" class="progress-bar bg-dark progress-w-33"></div></div>
+					</div>
+
+					<form id="formCadastro" method="post" action="#" novalidate>
+						<input type="hidden" id="tipoPerfil" name="tipoPerfil" value="">
+
+						<div id="step1" class="step active">
+							<h2 class="h5 mb-3">1. Como você deseja usar a plataforma?</h2>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<div class="profile-card" data-profile="cliente">
+										<div class="fw-semibold">Quero contratar um fotógrafo</div>
+										<p class="text-muted small mb-0">Fluxo rápido para clientes.</p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="profile-card" data-profile="fotografo">
+										<div class="fw-semibold">Sou fotógrafo e quero trabalhar</div>
+										<p class="text-muted small mb-0">Cadastro profissional com portfólio.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="step2" class="step">
+							<h2 class="h5 mb-3">2. Dados comuns</h2>
+							<div class="row g-3">
+								<div class="col-md-6"><label class="form-label">Nome completo</label><input class="form-control" name="nome" required></div>
+								<div class="col-md-6"><label class="form-label">E-mail</label><input type="email" class="form-control" name="email" required></div>
+								<div class="col-md-6">
+									<label class="form-label">Senha</label>
+									<input id="senhaCadastro" type="password" class="form-control" name="senha" required>
+									<div class="progress mt-2"><div id="forcaSenha" class="progress-bar progress-w-0"></div></div>
+									<div id="txtForca" class="small text-muted mt-1">Força da senha: muito fraca</div>
+								</div>
+								<div class="col-md-6"><label class="form-label">Telefone/WhatsApp</label><input class="form-control" name="telefone" required></div>
+								<div class="col-md-6"><label class="form-label">Cidade/Estado ou CEP</label><input class="form-control" name="localizacao" required></div>
+								<div class="col-md-6"><label class="form-label">Foto de perfil</label><input type="file" class="form-control" name="foto" accept="image/*"></div>
+							</div>
+
+							<div class="form-check mt-3">
+								<input class="form-check-input" type="checkbox" id="termos" required>
+								<label class="form-check-label" for="termos">Aceito termos de uso e política de privacidade.</label>
+							</div>
+						</div>
+
+						<div id="step3" class="step">
+							<h2 class="h5 mb-3">3. Dados do seu perfil</h2>
+
+							<div id="fieldsFotografo" class="d-none">
+								<div class="row g-3">
+									<div class="col-md-6">
+										<label class="form-label">Especialidades</label>
+										<div class="border rounded p-2">
+											<div class="form-check"><input class="form-check-input" type="checkbox" name="esp" value="Casamentos"><label class="form-check-label">Casamentos</label></div>
+											<div class="form-check"><input class="form-check-input" type="checkbox" name="esp" value="Eventos"><label class="form-check-label">Eventos</label></div>
+											<div class="form-check"><input class="form-check-input" type="checkbox" name="esp" value="Ensaios"><label class="form-check-label">Ensaios</label></div>
+											<div class="form-check"><input class="form-check-input" type="checkbox" name="esp" value="Publicidade"><label class="form-check-label">Publicidade</label></div>
+										</div>
+									</div>
+									<div class="col-md-6"><label class="form-label">Link de portfólio</label><input type="url" id="portfolio" class="form-control" placeholder="https://"></div>
+									<div class="col-12"><label class="form-label">Bio / descrição</label><textarea id="bio" class="form-control" rows="3" maxlength="500" placeholder="Conte um pouco sobre você e seu trabalho (Máx: 500 caracteres)"></textarea></div>
+									<div class="col-md-6"><label class="form-label">Equipamento (opcional)</label><input class="form-control"></div>
+									<div class="col-md-6"><label class="form-label">Preço médio</label><input id="preco" class="form-control" placeholder="Ex: R$ 800 - R$ 1.500"></div>
+								</div>
+							</div>
+
+							<div id="fieldsCliente" class="d-none">
+								<div class="row g-3">
+									<div class="col-12"><label class="form-label">Interesses</label><textarea id="interesses" class="form-control" rows="3" placeholder="Ex: Procuro fotógrafos para festas infantis"></textarea></div>
+									<div class="col-md-6"><label class="form-label">Empresa (opcional)</label><input class="form-control"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="d-flex justify-content-between mt-4">
+							<button id="btnVoltar" type="button" class="btn btn-outline-dark" disabled>Voltar</button>
+							<button id="btnAvancar" type="button" class="btn btn-dark">Avançar</button>
+							<button id="btnEnviar" type="submit" class="btn btn-dark d-none">Finalizar cadastro</button>
+						</div>
+					</form>
+
+					<!-- Toast de Notificação (Erro/Sucesso) -->
+					<div class="toast-container position-fixed top-0 end-0 p-3 toast-z">
+						<div id="cadastroToast" class="toast align-items-center border-0 text-white shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+							<div class="d-flex">
+								<div class="toast-body fw-medium px-3 py-2" id="toastMessage"></div>
+								<button type="button" class="btn-close btn-close-white me-3 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+
+<script>
+	const byId = (id) => document.getElementById(id);
+	const qsa = (sel) => [...document.querySelectorAll(sel)];
+
+	const steps = ['step1', 'step2', 'step3'].map(byId);
+	const stepNames = ['Perfil', 'Dados comuns', 'Dados específicos'];
+	const stepLabel = byId('stepLabel');
+	const stepName = byId('stepName');
+	const progressBar = byId('progressBar');
+	const btnVoltar = byId('btnVoltar');
+	const btnAvancar = byId('btnAvancar');
+	const btnEnviar = byId('btnEnviar');
+	const tipoPerfil = byId('tipoPerfil');
+	const fieldsFotografo = byId('fieldsFotografo');
+	const fieldsCliente = byId('fieldsCliente');
+	const formCadastro = byId('formCadastro');
+	let step = 0;
+
+	const cadastroToastEl = byId('cadastroToast');
+	const toastMessage = byId('toastMessage');
+	const showToast = (msg, theme) => {
+		toastMessage.textContent = msg;
+		cadastroToastEl.className = `toast align-items-center border-0 text-bg-${theme} shadow-lg rounded-4`;
+		const bsToast = new bootstrap.Toast(cadastroToastEl);
+		bsToast.show();
+	};
+
+	function renderStep() {
+		steps.forEach((el, i) => el.classList.toggle('active', i === step));
+		stepLabel.textContent = `Etapa ${step + 1} de ${steps.length}`;
+		stepName.textContent = stepNames[step];
+		progressBar.style.width = `${((step + 1) / steps.length) * 100}%`;
+		btnVoltar.disabled = step === 0;
+		btnAvancar.classList.toggle('d-none', step === steps.length - 1);
+		btnEnviar.classList.toggle('d-none', step !== steps.length - 1);
+	}
+
+	function stepValido() {
+		if (step === 0) return Boolean(tipoPerfil.value);
+		if (step !== 1) return true;
+		return qsa('#step2 [required]').every((el) => el.checkValidity());
+	}
+
+	function aplicarPerfil(profile) {
+		tipoPerfil.value = profile;
+		fieldsFotografo.classList.toggle('d-none', profile !== 'fotografo');
+		fieldsCliente.classList.toggle('d-none', profile !== 'cliente');
+
+		['portfolio', 'bio', 'preco'].forEach((id) => { byId(id).required = profile === 'fotografo'; });
+		byId('interesses').required = profile === 'cliente';
+	}
+
+	qsa('.profile-card').forEach((card) => {
+		card.addEventListener('click', () => {
+			qsa('.profile-card').forEach((c) => c.classList.remove('active'));
+			card.classList.add('active');
+			aplicarPerfil(card.dataset.profile);
+		});
+	});
+
+	btnAvancar.addEventListener('click', () => {
+		if (!stepValido()) {
+			showToast('Revise os campos obrigatórios desta etapa para continuar.', 'danger');
+			return;
+		}
+		step = Math.min(step + 1, steps.length - 1);
+		renderStep();
+	});
+
+	btnVoltar.addEventListener('click', () => {
+		step = Math.max(step - 1, 0);
+		renderStep();
+	});
+
+	const senhaCadastro = byId('senhaCadastro');
+	const forcaSenha = byId('forcaSenha');
+	const txtForca = byId('txtForca');
+	function atualizarForcaSenhaCadastro() {
+		const leitura = window.Auth && window.Auth.passwordStrength
+			? window.Auth.passwordStrength(senhaCadastro.value)
+			: { score: 0, level: 'muito fraca', color: 'bg-danger' };
+
+		forcaSenha.style.width = `${leitura.score}%`;
+		forcaSenha.className = `progress-bar ${leitura.color}`;
+		txtForca.textContent = `Força da senha: ${leitura.level}`;
+		return leitura;
+	}
+
+	senhaCadastro.addEventListener('input', atualizarForcaSenhaCadastro);
+
+	async function checkPasswordLeaked(password) {
+		// Criptografa a senha usando SHA-1 (padrão exigido pelo HIBP)
+		const msgBuffer = new TextEncoder().encode(password);
+		const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
+		const hashArray = Array.from(new Uint8Array(hashBuffer));
+		const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+		
+		const prefix = hashHex.slice(0, 5); // Envia só os primeiros 5 caracteres (Segurança)
+		const suffix = hashHex.slice(5);
+		try {
+			const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+			const text = await response.text();
+			// Verifica se o resto do hash vazou em alguma linha
+			return text.split('\n').some(line => line.split(':')[0] === suffix);
+		} catch (error) {
+			return false; // Ignora se a API cair para não bloquear o cadastro
+		}
+	}
+
+	formCadastro.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const forcaAtual = atualizarForcaSenhaCadastro();
+		if (forcaAtual.level === 'muito fraca' || forcaAtual.level === 'fraca') {
+			const continuar = confirm('Sua senha ainda está fraca. Deseja continuar mesmo assim?');
+			if (!continuar) {
+				showToast('Cadastro pausado para você melhorar a senha.', 'warning');
+				return;
+			}
+		}
+
+		// Verifica vazamentos na internet antes de prosseguir
+		const isLeaked = await checkPasswordLeaked(document.querySelector('input[name="senha"]').value);
+		if (isLeaked) {
+			showToast('Atenção: Esta senha foi encontrada em vazamentos públicos na internet. Por segurança, escolha outra.', 'danger');
+			return;
+		}
+
+		const payload = {
+			nome: document.querySelector('input[name="nome"]').value,
+			email: document.querySelector('input[name="email"]').value,
+			senha: document.querySelector('input[name="senha"]').value,
+			tipo: document.getElementById('tipoPerfil').value
+		};
+
+		// Se for fotógrafo, busca quais checkboxes de especialidade foram marcadas
+		if (payload.tipo === 'fotografo') {
+			const espCheckboxes = document.querySelectorAll('input[name="esp"]:checked');
+			payload.especialidades = Array.from(espCheckboxes).map(cb => cb.value);
+			payload.bio = document.getElementById('bio').value;
+			payload.preco = document.getElementById('preco').value;
+		}
+
+		const fotoInput = document.querySelector('input[name="foto"]');
+
+		const processRegistration = async (finalPayload) => {
+			const result = await window.Auth.createUser(finalPayload);
+
+			if (!result.ok) {
+				showToast(result.message, 'danger');
+				return;
+			}
+
+			showToast('Cadastro concluído com sucesso! Você já pode fazer login.', 'success');
+			setTimeout(() => {
+				window.location.href = '/login';
+			}, 1500);
+		};
+
+		if (fotoInput.files && fotoInput.files[0]) {
+			// Utiliza o FileReader para converter o arquivo de imagem em uma string (Base64), 
+			// possibilitando o armazenamento da foto em texto no banco de dados local.
+			const reader = new FileReader();
+			reader.onload = (ev) => {
+				payload.foto = ev.target.result;
+				processRegistration(payload);
+			};
+			reader.readAsDataURL(fotoInput.files[0]);
+		} else {
+			processRegistration(payload);
+		}
+	});
+
+	renderStep();
+	atualizarForcaSenhaCadastro();
+</script>
+{% endblock %}

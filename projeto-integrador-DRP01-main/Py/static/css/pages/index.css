@@ -1,0 +1,179 @@
+body {
+    background: #fff;
+    color: #111;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 2rem;
+    background: #f3f3f3;
+    border: 1px solid #e5e5e5;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.pill:hover {
+    background: #e9e9e9;
+    border-color: #ccc;
+}
+
+.box {
+    background: #fff;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+}
+
+.ghost {
+    background: #f6f6f6;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+    transition: background 0.3s ease;
+}
+
+.ghost:hover {
+    background: #f1f1f1;
+}
+
+.hero {
+    padding: 5.5rem 0 4.5rem;
+}
+
+.hero h1 {
+    max-width: 900px;
+    margin: 0 auto;
+    letter-spacing: -0.02em;
+}
+
+.hero-description {
+    max-width: 760px;
+}
+
+.small-muted {
+    color: #666;
+}
+
+.icon {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #f4f4f4;
+    font-size: 2.1rem;
+    margin: 0 auto;
+    color: #333;
+    transition: transform 0.3s ease;
+}
+
+.box:hover .icon {
+    transform: scale(1.1);
+    background: #eee;
+}
+
+.avatar-small {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #ddd;
+    display: inline-block;
+}
+
+.line {
+    height: 1px;
+    background: #efefef;
+}
+
+.chart {
+    height: 160px;
+    display: flex;
+    align-items: end;
+    gap: 8px;
+}
+
+.bar {
+    flex: 1;
+    background: #efefef;
+    border-radius: 12px 12px 0 0;
+    transition: background 0.3s;
+}
+
+.bar:hover {
+    background: #ddd;
+}
+
+.bar.dark {
+    background: #222;
+}
+
+.bar.dark:hover {
+    background: #000;
+}
+
+.ghost-square {
+    width: 100px;
+    height: 100px;
+}
+
+.chart-bar-42 { height: 42%; }
+.chart-bar-58 { height: 58%; }
+.chart-bar-60 { height: 60%; }
+.chart-bar-72 { height: 72%; }
+.chart-bar-74 { height: 74%; }
+.chart-bar-82 { height: 82%; }
+.chart-bar-88 { height: 88%; }
+
+.pill-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+}
+
+.preview-center {
+    height: 160px;
+}
+
+.preview-avatar {
+    width: 72px;
+    height: 72px;
+}
+
+[data-bs-theme="dark"] body {
+    background: #0f1115 !important;
+    color: #e8edf5 !important;
+}
+
+[data-bs-theme="dark"] .pill {
+    background: #2a3240;
+    border-color: #495568;
+    color: #edf2f8;
+}
+
+[data-bs-theme="dark"] .small-muted {
+    color: #b7c1cf;
+}
+
+[data-bs-theme="dark"] .icon {
+    background: #232a36;
+    color: #e8edf5;
+}
+
+[data-bs-theme="dark"] .line {
+    background: #323946;
+}
+
+[data-bs-theme="dark"] .bar {
+    background: #3b4557;
+}
+
+[data-bs-theme="dark"] .bar.dark {
+    background: #8fb2ff;
+}

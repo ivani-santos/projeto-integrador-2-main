@@ -1,0 +1,35 @@
+.profile-card {
+    border: 1px solid #ececec;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+}
+
+.profile-card.active {
+    border-color: #111;
+    box-shadow: 0 0 0 2px #11111112;
+}
+
+.progress {
+    height: 8px;
+}
+
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
+
+.progress-w-33 {
+    width: 33%;
+}
+
+.progress-w-0 {
+    width: 0%;
+}
+
+.toast-z {
+    z-index: 1055;
+}

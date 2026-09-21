@@ -1,0 +1,88 @@
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/index.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <section class="hero text-center">
+        <h1 class="fw-bold display-6">Conecte clientes e fotógrafos, com acolhimento e simplicidade.</h1>
+        <p class="small-muted hero-description mx-auto mt-3">Plataforma para agendamentos rápidos, perfil claro e uma experiência sem complicação — do primeiro contato ao dia da sessão.</p>
+        <div class="d-flex gap-2 justify-content-center flex-wrap">
+            <a class="btn btn-outline-dark px-4" href="{{ url_for('cadastro') }}">Ver como funciona</a>
+            <a class="btn btn-dark px-4" href="{{ url_for('cadastro') }}">Começar agora</a>
+        </div>
+    </section>
+    <section class="my-5" id="clientes">
+        <h2 class="h4 fw-bold text-center mb-2">Em poucos passos</h2>
+        <p class="small-muted text-center mb-4">Fluxo direto para quem está começando e para quem já tem experiência.</p>
+        <div class="row g-3">
+            <div class="col-md-4"><div class="box p-4 text-center h-100"><div class="icon mb-3"><i class="fa-regular fa-compass"></i></div><h3 class="h5">Escolha</h3><p class="small-muted mb-0 small">Estilo, cidade e disponibilidade.</p><div class="pill mt-3">Filtros simples</div></div></div>
+            <div class="col-md-4"><div class="box p-4 text-center h-100"><div class="icon mb-3"><i class="fa-regular fa-comments"></i></div><h3 class="h5">Converse</h3><p class="small-muted mb-0 small">Envie detalhes sem burocracia.</p><div class="pill mt-3">Mensagens objetivas</div></div></div>
+            <div class="col-md-4"><div class="box p-4 text-center h-100"><div class="icon mb-3"><i class="fa-regular fa-calendar-check"></i></div><h3 class="h5">Agende</h3><p class="small-muted mb-0 small">Confirme datas e prazos.</p><div class="pill mt-3">Status do pedido</div></div></div>
+        </div>
+    </section>
+
+    <!-- Clientes -->
+    <section class="my-5" id="fotografos">
+        <div class="d-flex align-items-center justify-content-between mb-3"><div><h2 class="h4 fw-bold mb-1">Para clientes</h2><p class="small-muted mb-0">Encontre o fotógrafo certo com clareza, rapidez e segurança.</p></div><a class="btn btn-outline-dark btn-sm" href="{{ url_for('cadastro') }}">Ver exemplos de sessões</a></div>
+        <div class="row g-3">
+            <div class="col-lg-6"><div class="box p-3 p-md-4 h-100 d-flex gap-3"><div class="ghost ghost-square"></div><div><h3 class="h5 mb-1">João da Silva</h3><p class="small-muted small mb-2">Fotografia de Casamentos</p><p class="small mb-2">Email: joaodasilva@email.com | Contato: (11) 99999-9999</p><div class="d-flex gap-2 flex-wrap"><span class="pill">Portfólio</span><span class="pill">Casamentos</span><span class="pill">Eventos</span></div></div></div></div>
+            <div class="col-lg-6"><div class="box p-3 p-md-4 h-100 d-flex gap-3"><div class="ghost ghost-square"></div><div><h3 class="h5 mb-1">Maria Oliveira</h3><p class="small-muted small mb-2">Fotografia Retratos</p><p class="small mb-2">Email: mariaoliveira@email.com | Contato: (21) 98888-8888</p><div class="d-flex gap-2 flex-wrap"><span class="pill">Portfólio</span><span class="pill">Retratos</span><span class="pill">Eventos</span></div></div></div></div>
+        </div>
+    </section>
+
+    <!-- Fotógrafos -->
+    <section class="my-5">
+        <div class="d-flex align-items-center justify-content-between mb-3"><div><h2 class="h4 fw-bold mb-1">Para fotógrafos</h2><p class="small-muted mb-0">Mais oportunidades com menos esforço — do perfil ao agendamento.</p></div><a class="btn btn-dark btn-sm" href="{{ url_for('cadastro') }}">Quero receber propostas</a></div>
+        <div class="row g-3">
+            <div class="col-lg-6"><div class="box p-4 h-100"><h3 class="h5">Cliente A</h3><p class="small-muted small mb-2">Conectou-se com Joao da Silva</p><span class="pill">Cliente satisfeito</span></div></div>
+            <div class="col-lg-6"><div class="box p-4 h-100"><h3 class="h5">Cliente B</h3><p class="small-muted small mb-2">Conectou-se com Maria Oliveira</p><span class="pill">Atendimento aprovado</span></div></div>
+        </div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="my-5 box p-4 p-md-5">
+        <div class="d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3 mb-4">
+            <div><h2 class="h4 fw-bold mb-1">Resultados (visão geral)</h2><p class="small-muted mb-0">Indicadores pensados para dar confiança em poucos segundos.</p></div>
+            <a class="btn btn-dark btn-sm" href="{{ url_for('cadastro') }}">Ver como funciona</a>
+        </div>
+        <div class="chart mb-2"><div class="bar chart-bar-42"></div><div class="bar chart-bar-58"></div><div class="bar dark chart-bar-82"></div><div class="bar chart-bar-60"></div><div class="bar chart-bar-72"></div><div class="bar chart-bar-88"></div><div class="bar chart-bar-74"></div></div>
+        <div class="d-flex justify-content-between small-muted small mb-4"><span>Semanas</span><span>Quantidade</span></div>
+        <div class="row g-3 text-center">
+            <div class="col-md-4"><div class="ghost p-4"><h3 class="fw-bold mb-1">2.480</h3><div class="small-muted small">Agendamentos concluídos</div><div class="small mt-1">+18% no mês</div></div></div>
+            <div class="col-md-4"><div class="ghost p-4"><h3 class="fw-bold mb-1">12 min</h3><div class="small-muted small">Tempo médio de resposta</div><div class="small mt-1">-22% vs. anterior</div></div></div>
+            <div class="col-md-4"><div class="ghost p-4"><h3 class="fw-bold mb-1">4,8/5</h3><div class="small-muted small">Satisfação dos clientes</div><div class="small mt-1">+0,3</div></div></div>
+        </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="my-5">
+        <h2 class="h4 fw-bold text-center mb-3">Depoimentos</h2>
+        <p class="small-muted text-center mb-4">Gente real, experiências claras e respeitosas.</p>
+        <div class="row g-3">
+            <div class="col-md-4"><div class="box p-4 h-100"><div class="d-flex align-items-center gap-2 mb-3"><span class="avatar"></span><strong>Marina R.</strong></div><p class="mb-0">A conversa foi fácil e sem pressão. O fotógrafo entendeu exatamente o que eu queria.</p></div></div>
+            <div class="col-md-4"><div class="box p-4 h-100"><div class="d-flex align-items-center gap-2 mb-3"><span class="avatar"></span><strong>Carlos M.</strong></div><p class="mb-0">Como fotógrafo, gostei do jeito que o cliente descreve a demanda. Menos troca e mais alinhamento.</p></div></div>
+            <div class="col-md-4"><div class="box p-4 h-100"><div class="d-flex align-items-center gap-2 mb-3"><span class="avatar"></span><strong>Ana Paula S.</strong></div><p class="mb-0">O site é bem direto. Mesmo sem experiência, consegui contratar rápido e com segurança.</p></div></div>
+        </div>
+    </section>
+
+    <!-- Blocos finais -->
+    <section class="row g-3 my-5">
+        <div class="col-lg-6"><div class="ghost p-4 h-100 position-relative"><p class="mb-0 small">Monocromia elegante, humana e acessível. A experiência é desenhada para ser clara para todas as idades.</p><div class="position-absolute bottom-0 end-0 p-3 d-flex gap-2"><span class="pill"></span><span class="pill pill-dot"></span><span class="pill pill-dot"></span><span class="pill pill-dot"></span></div></div></div>
+        <div class="col-lg-6"><div class="ghost p-4 h-100 position-relative"><div class="d-flex align-items-center justify-content-center preview-center"><span class="avatar preview-avatar"></span></div><p class="mb-0 small text-center">Atendimento por cidade: encontre fotógrafos próximos e agende com mais facilidade.</p></div></div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = window.Auth && window.Auth.currentUser();
+        if (user) {
+            window.location.href = window.Auth.redirectForRole(user.tipo);
+        }
+    });
+</script>
+{% endblock %}

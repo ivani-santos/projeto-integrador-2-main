@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro | FOTECTA</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand-wrap">
+        <span class="brand-avatar"></span>
+        <div class="brand">FOTECTA</div>
+      </div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/cadastro">Cadastre-se</a>
+        <a href="/sobrenos">Sobre nós</a>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <div class="auth-card">
+        <h2>Criar conta</h2>
+        <div id="message" class="message"></div>
+        <form id="register-form">
+          <label>
+            Nome
+            <input id="nome" type="text" placeholder="Seu nome" required />
+          </label>
+          <label>
+            E-mail
+            <input id="email" type="email" placeholder="seu@email.com" required />
+          </label>
+          <label>
+            Senha
+            <input id="senha" type="password" placeholder="Crie uma senha" required />
+          </label>
+          <label>
+            Tipo
+            <select id="tipo">
+              <option value="cliente">Cliente</option>
+              <option value="fotografo">Fotógrafo</option>
+            </select>
+          </label>
+          <button type="submit">Cadastrar</button>
+        </form>
+      </div>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

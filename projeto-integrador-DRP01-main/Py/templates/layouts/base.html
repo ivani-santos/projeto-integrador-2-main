@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <!-- Bootstrap 5.3.3 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <!-- Font Awesome para ícones -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/layout/base.css') }}">
+        
+        <title>{% block title %}FOTECTA - Página Inicial{% endblock %}</title>
+
+        <!-- Previne flash branco verificando o tema antes de renderizar -->
+        <script>
+            const savedTheme = localStorage.getItem('fotecta_theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        </script>
+
+        <style>
+            /* Animação de fade-in suave para a transição de páginas */
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .page-transition {
+                animation: fadeIn 0.4s ease-out forwards;
+            }
+
+            /* Overlay de Carregamento Global */
+            #globalSpinnerOverlay {
+                position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+                background: rgba(255, 255, 255, 0.8);
+                z-index: 9999; display: flex; align-items: center; justify-content: center;
+                opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            }
+            #globalSpinnerOverlay.active { opacity: 1; pointer-events: all; }
+            [data-bs-theme="dark"] #globalSpinnerOverlay { background: rgba(33, 37, 41, 0.8); }
+        </style>
+
+        {% block styles %}{% endblock %}
+    </head>
+
+    <body class="bg-light d-flex flex-column min-vh-100">
+        <!-- Mensagem para navegadores sem JavaScript (acessibilidade e debug) -->
+        <noscript>
+            <div class="alert alert-warning text-center mb-0">
+                Este site usa JavaScript para recursos interativos. Ative o JavaScript
+                no seu navegador para uma melhor experiência.
+            </div>
+        </noscript>
+        
+        {% block topbar %}
+        <!-- Menu Global (Mantendo design e links da homepage, fixo no topo) -->
+        <header class="topbar navbar navbar-expand-lg navbar-dark bg-dark sticky-top w-100 px-0">
+            <div class="container-fluid px-4 py-2 py-lg-3">
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Bolinha de Avatar com Dropdown (Aparece Logado) -->
+                    <div class="dropdown nav-logged-in d-none">
+                        <span class="avatar avatar-clickable" id="avatarDropdown" data-bs-toggle="dropdown" aria-expanded="false"></span>
+                        <ul class="dropdown-menu shadow mt-2" aria-labelledby="avatarDropdown">
+                            <li><a class="dropdown-item nav-cliente d-none" href="/clientelogado">Meu Perfil</a></li>
+                            <li><a class="dropdown-item nav-fotografo d-none" href="/fotografologado">Painel do Fotógrafo</a></li>
+                            <li><a class="dropdown-item" href="/editar-perfil">Editar Dados</a></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="btnLogoutDropdown">Sair</a></li>
+                        </ul>
+                    </div>
+                    <!-- Bolinha de Avatar Padrão (Aparece Deslogado) -->
+                    <span class="avatar nav-logged-out"></span>
+                    <strong class="fs-4 text-white">FOTECTA</strong>
+                    <!-- Botão Modo Escuro -->
+                    <button id="btnThemeToggle" class="btn btn-outline-light btn-sm ms-2 border-0" title="Alternar Tema"><i class="fa-solid fa-moon"></i></button>
+                </div>
+                
+                <!-- Botão Hamburger -->
+                <button class="navbar-toggler border-0 px-1" type="button" data-bs-toggle="collapse" data-bs-target="#topbarNav" aria-controls="topbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Links do Menu -->
+                <div class="collapse navbar-collapse" id="topbarNav">
+                    <nav class="navbar-nav align-items-lg-center gap-2 gap-lg-4 small ms-auto ps-lg-4 mt-3 mt-lg-0">
+                        <a id="navHomeLink" class="nav-link text-white" href="{{ url_for('index') }}">Home</a>
+                        <a class="nav-link text-white nav-logged-out" href="{{ url_for('login') }}">Login</a>
+                        <a class="nav-link text-white nav-logged-out" href="{{ url_for('cadastro') }}">Cadastre-se</a>
+                        <a class="nav-link text-white nav-cliente d-none" href="/clientelogado">Área do Cliente</a>
+                        <a class="nav-link text-white nav-fotografo d-none" href="/fotografologado">Painel do Fotógrafo</a>
+                        <a class="nav-link text-white nav-admin d-none" href="{{ url_for('admin') }}">Admin</a>
+                        <a class="nav-link text-white" href="{{ url_for('sobrenos') }}">Sobre nós</a>
+                        <span class="text-light fw-medium nav-logged-in d-none ms-lg-3" id="navUserName"></span>
+                        <a class="nav-link text-danger fw-semibold nav-logged-in d-none" href="#" id="btnLogoutGlobal">Sair</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        {% endblock %}
+        
+        <!-- Container central com fade-in em todas as páginas -->
+        <div class="container-fluid px-0 mt-0 mb-5 page-transition">
+            {% block content %}
+            {% endblock %}
+        </div>
+        
+        {% block footer %}
+        <!-- Rodapé Global (Design alinhado com o Header) -->
+        <footer class="w-100 mt-auto py-4 site-footer">
+            <div class="container-fluid px-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 mb-3 mb-md-0">
+                    <strong class="fs-5 text-white">FOTECTA</strong>
+                </div>
+                <div class="small text-light text-center text-md-end opacity-75">
+                    © 2026 • FOTECTA <span class="d-none d-md-inline ms-1 me-1">|</span><br class="d-md-none">
+                    <a href="{{ url_for('sobrenos') }}" class="text-light text-decoration-none ms-md-2">Sobre nós</a> • 
+                    <a href="{{ url_for('sobrenos') }}" class="text-light text-decoration-none">Privacidade</a> • 
+                    <a href="{{ url_for('sobrenos') }}" class="text-light text-decoration-none">Termos</a> • 
+                    <a href="{{ url_for('sobrenos') }}" class="text-light text-decoration-none">Contato</a>
+                </div>
+            </div>
+        </footer>
+        {% endblock %}
+
+        <!-- Global Spinner Overlay -->
+        <div id="globalSpinnerOverlay">
+            <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+        </div>
+
+        <!-- Bootstrap 5.3.3 JS Bundle (Inclui Popper.js) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        
+        <!-- Seu JavaScript customizado -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/auth.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/ui-helpers.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+        <script>
+            // Inicializa tooltips via helper conciso
+            document.addEventListener('DOMContentLoaded', () => {
+                if (window.UIHelpers && window.UIHelpers.initTooltips) window.UIHelpers.initTooltips({ touchMs: 1500 });
+
+                // Helper global para exibir mensagens amigáveis (Toasts)
+                window.showToast = function(message, type = 'danger') {
+                    const toastEl = document.getElementById('globalToast');
+                    const toastBody = document.getElementById('globalToastMessage');
+                    
+                    // Atualiza a cor (danger = erro, success = sucesso, warning = aviso)
+                    toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+                    
+                    // Define a mensagem e exibe
+                    toastBody.textContent = message;
+                    
+                    // Inicializa e mostra usando a API do Bootstrap
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                };
+
+                // Helpers globais para o Spinner de carregamento
+                window.showLoading = function() {
+                    document.getElementById('globalSpinnerOverlay').classList.add('active');
+                };
+                window.hideLoading = function() {
+                    document.getElementById('globalSpinnerOverlay').classList.remove('active');
+                };
+
+                // Interceptador global do fetch para exibir o Spinner automaticamente em requisições à API
+                const originalFetch = window.fetch;
+                window.fetch = async function() {
+                    const isApi = arguments[0] && typeof arguments[0] === 'string' && arguments[0].startsWith('/api/');
+                    let spinnerTimeout;
+                    if (isApi) {
+                        // Aguarda 500ms antes de mostrar o spinner para evitar o "piscar" rápido
+                        spinnerTimeout = setTimeout(() => window.showLoading(), 500);
+                    }
+                    try {
+                        return await originalFetch.apply(this, arguments);
+                    } finally {
+                        if (isApi) {
+                            clearTimeout(spinnerTimeout);
+                            window.hideLoading();
+                        }
+                    }
+                };
+            });
+        </script>
+
+        <!-- Recupera e exibe a foto do usuário logado globalmente -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Lógica do Modo Escuro
+                const btnThemeToggle = document.getElementById('btnThemeToggle');
+                const htmlEl = document.documentElement;
+                
+                const updateThemeIcon = () => {
+                    const isDark = htmlEl.getAttribute('data-bs-theme') === 'dark';
+                    btnThemeToggle.innerHTML = isDark ? '<i class="fa-solid fa-sun text-warning"></i>' : '<i class="fa-solid fa-moon"></i>';
+                };
+                updateThemeIcon();
+                
+                // Identifica o tema atual (claro/escuro), inverte a escolha e persiste a configuração no navegador.
+                btnThemeToggle.addEventListener('click', () => {
+                    const currentTheme = htmlEl.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    htmlEl.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('fotecta_theme', newTheme);
+                    updateThemeIcon();
+                });
+
+                if (window.Auth) {
+                    // Função para atualizar a UI da navbar com base no usuário (sincrona)
+                    const applyUserToNav = (user) => {
+                        // Seleciona os links pela classe para mostrá-los ou escondê-los
+                        const loggedOutLinks = document.querySelectorAll('.nav-logged-out');
+                        const loggedInLinks = document.querySelectorAll('.nav-logged-in');
+                        const clienteLinks = document.querySelectorAll('.nav-cliente');
+                        const fotografoLinks = document.querySelectorAll('.nav-fotografo');
+                        const adminLinks = document.querySelectorAll('.nav-admin');
+
+                        if (!user) return;
+
+                        // Esconde os links de Login e Cadastro se estiver logado
+                        loggedOutLinks.forEach(el => el.classList.add('d-none'));
+                        // Mostra o botão "Sair" universal
+                        loggedInLinks.forEach(el => el.classList.remove('d-none'));
+
+                        // Redireciona o link "Home" para a página correta do usuário
+                        const navHomeLink = document.getElementById('navHomeLink');
+                        if (navHomeLink) navHomeLink.href = window.Auth.redirectForRole(user.tipo);
+
+                        // Preenche o nome do usuário na navbar (Pegando apenas o primeiro nome)
+                        const navUserName = document.getElementById('navUserName');
+                        if (navUserName) {
+                            navUserName.textContent = `Olá, ${user.nome.split(' ')[0]}`;
+                        }
+
+                        // Exibe dinamicamente somente as opções de navegação compatíveis com as permissões da conta.
+                        if (user.tipo === 'cliente') {
+                            clienteLinks.forEach(el => el.classList.remove('d-none'));
+                        } else if (user.tipo === 'fotografo') {
+                            fotografoLinks.forEach(el => el.classList.remove('d-none'));
+                        } else if (user.tipo === 'admin') {
+                            adminLinks.forEach(el => el.classList.remove('d-none'));
+                        }
+
+                        // Carrega a foto de perfil salva
+                        if (user.foto) {
+                            const avatarEls = document.querySelectorAll('.topbar .avatar');
+                            avatarEls.forEach(el => {
+                                el.style.backgroundImage = `url('${user.foto}')`;
+                                el.style.backgroundSize = 'cover';
+                                el.style.backgroundPosition = 'center';
+                            });
+                        }
+                    };
+
+                    // Tenta obter o usuário do cache synchronously; se não houver, faz refresh assíncrono.
+                    const cached = window.Auth.currentUser();
+                    if (cached) {
+                        applyUserToNav(cached);
+                    } else if (window.Auth.refreshCurrentUser) {
+                        window.Auth.refreshCurrentUser().then((u) => {
+                            if (u) applyUserToNav(u);
+                        }).catch(() => {/* ignore */});
+                    }
+                    
+                    // Lógica para os botões de Sair (Topo ou Dropdown)
+                    const btnLogoutGlobal = document.getElementById('btnLogoutGlobal');
+                    const btnLogoutDropdown = document.getElementById('btnLogoutDropdown');
+                    const handleLogout = async (e) => {
+                        e.preventDefault();
+                        try { await window.Auth.logout(); } catch(e) { /* ignore */ }
+                        window.location.href = '/login';
+                    };
+                    if (btnLogoutGlobal) btnLogoutGlobal.addEventListener('click', handleLogout);
+                    if (btnLogoutDropdown) btnLogoutDropdown.addEventListener('click', handleLogout);
+                }
+            });
+        </script>
+        
+        {% block scripts %}{% endblock %}
+    </body>
+</html>

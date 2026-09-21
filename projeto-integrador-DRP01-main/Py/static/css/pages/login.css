@@ -1,0 +1,32 @@
+.login-card {
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+}
+
+.field-error {
+    color: #dc3545;
+    font-size: 0.86rem;
+    margin-top: 0.35rem;
+    min-height: 1rem;
+}
+
+.progress-w-0 {
+    width: 0%;
+}
+
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-check-input:focus-visible,
+a:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+.toast-z {
+    z-index: 1055;
+}
+
+[data-bs-theme="dark"] .login-card {
+    border-color: #2f3642;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.36);
+}

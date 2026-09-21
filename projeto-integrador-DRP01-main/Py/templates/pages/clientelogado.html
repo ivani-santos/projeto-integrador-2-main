@@ -1,0 +1,64 @@
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/clientelogado.css') }}">
+{% endblock %}
+
+{% block content %}
+	<div class="container py-4">
+		<div class="box p-4 p-md-5">
+			<h1 class="h3 fw-bold mb-2">Área do Cliente</h1>
+			<p id="clienteInfo" class="text-muted mb-4">Você está logado como cliente.</p>
+			<script src="{{ url_for('static', filename='js/clientelogado.js') }}"></script>
+		// Re-render when outras partes da UI atualizam o usuário
+		window.addEventListener('fotecta:user-updated', async () => {
+			let refreshed = await (window.Auth.refreshCurrentUser ? window.Auth.refreshCurrentUser() : null);
+			if (!refreshed) {
+				try { refreshed = JSON.parse(localStorage.getItem('fotecta_user')); } catch(e) { refreshed = null; }
+			}
+			if (refreshed) {
+				cliente = refreshed;
+				const favs = (cliente.favoritos || []).map(f => String(f).toLowerCase());
+				const favsList = window.Auth.getUsers().filter(u => u.tipo === 'fotografo' && favs.includes(String(u.email).toLowerCase()));
+				listaFavoritos.innerHTML = '';
+				if (favsList.length === 0) {
+					listaFavoritos.innerHTML = '<div class="col-12"><p class="text-muted mb-0">Você ainda não tem favoritos. Acesse a busca e clique no coração para salvar fotógrafos.</p></div>';
+				} else {
+					favsList.forEach(f => {
+						const col = document.createElement('div');
+						col.className = 'col-12 col-md-6 col-lg-4';
+						col.innerHTML = renderFotografoCard(f, 'favoritos');
+						listaFavoritos.appendChild(col);
+					});
+				}
+			}
+		});
+
+	// Caso o usuário atualize favoritos em outra página, re-renderiza ao focar a aba
+	window.addEventListener('focus', async () => {
+		let refreshed = await (window.Auth.refreshCurrentUser ? window.Auth.refreshCurrentUser() : null);
+		if (!refreshed) {
+			try { refreshed = JSON.parse(localStorage.getItem('fotecta_user')); } catch(e) { refreshed = null; }
+		}
+		if (refreshed) {
+			// atualiza cliente e re-renderiza favoritos
+			cliente = refreshed;
+			const favs = (cliente.favoritos || []);
+			const favsList = window.Auth.getUsers().filter(u => u.tipo === 'fotografo' && favs.includes(u.id));
+			listaFavoritos.innerHTML = '';
+			if (favsList.length === 0) {
+				listaFavoritos.innerHTML = '<div class="col-12"><p class="text-muted mb-0">Você ainda não tem favoritos. Acesse a busca e clique no coração para salvar fotógrafos.</p></div>';
+			} else {
+				favsList.forEach(f => {
+					const col = document.createElement('div');
+					col.className = 'col-12 col-md-6 col-lg-4';
+					col.innerHTML = renderFotografoCard(f, 'favoritos');
+					listaFavoritos.appendChild(col);
+				});
+			}
+		}
+	});
+}
+)();
+</script>
+{% endblock %}

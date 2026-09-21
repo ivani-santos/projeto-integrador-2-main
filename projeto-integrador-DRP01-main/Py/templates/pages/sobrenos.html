@@ -1,0 +1,70 @@
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/sobrenos.css') }}">
+{% endblock %}
+
+{% block content %}
+	<div class="container about-wrap">
+        <div class="box p-4 p-md-5 text-center about-box">
+			<div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="h3 fw-bold mb-0">Sobre o Projeto</h1>
+                <button id="btnEditarSobre" class="btn btn-sm btn-outline-dark d-none"><i class="fa-solid fa-pen"></i> Editar Texto</button>
+                <button id="btnSalvarSobre" class="btn btn-sm btn-success d-none"><i class="fa-solid fa-check"></i> Salvar</button>
+            </div>
+            <div id="textoSobreNos" class="mb-0 about-text">Este projeto foi criado em 2026 pelo Grupo 9 da turma de TI da UNIVESP. Grupo composto pelos alunos: Gabriela Sampaio da Silva, Gustavo Santos Lima de Oliveira, Ivani Santos André, Jacqueline Santana Nascimento Benevides, Leonardo Quaresma da Silva, Maria José de Sousa, Rodolfo Felix de Azevedo e Victor Gabriel Santos Magalhães.</div>
+		</div>
+
+        <div class="box p-4 p-md-5 mt-4 w-100 about-box">
+			<h2 class="h4 fw-bold mb-4 text-center">Dúvidas Frequentes (FAQ)</h2>
+			<div class="accordion" id="faqAccordion">
+				<div class="accordion-item">
+					<h2 class="accordion-header"><button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Esqueci minha senha, como recupero?</button></h2>
+					<div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Caso você erre a senha 3 vezes seguidas na tela de Login, o sistema será bloqueado temporariamente por segurança. Você será direcionado para uma página onde deverá informar seu e-mail e sua <b>Data de Nascimento</b>. O administrador avaliará sua solicitação e, após aprovada, sua senha retornará para <code>fotecta123</code>. Recomendamos trocá-la assim que acessar a conta novamente!</div></div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header"><button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Como entro em contato com um Fotógrafo/Cliente?</button></h2>
+					<div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">A plataforma FOTECTA permite que você encontre os profissionais, visualize o portfólio completo, e clique no botão <b>"Entrar em Contato"</b>. Isso abrirá automaticamente o seu aplicativo de e-mail padrão para você iniciar a conversa diretamente com o profissional. Fotógrafos também possuem acesso às redes sociais cadastradas e WhatsApp nos perfis públicos.</div></div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header"><button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Como funciona o sistema de avaliações?</button></h2>
+					<div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Clientes que marcam fotógrafos como Favoritos (❤️) podem deixar depoimentos e notas (de 1 a 5 estrelas). Essas notas constroem a média do profissional na página de busca. O fotógrafo, por sua vez, pode ler e responder as avaliações diretamente pela <i>dashboard</i> (Painel) de controle dele.</div></div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const textoSobreNos = document.getElementById('textoSobreNos');
+        const btnEditarSobre = document.getElementById('btnEditarSobre');
+        const btnSalvarSobre = document.getElementById('btnSalvarSobre');
+        
+        // Carrega texto salvo se existir
+        const savedText = localStorage.getItem('fotecta_sobrenos_text');
+        if (savedText) textoSobreNos.innerHTML = savedText;
+
+        if (window.Auth && window.Auth.currentUser()?.tipo === 'admin') {
+            btnEditarSobre.classList.remove('d-none');
+            
+            btnEditarSobre.addEventListener('click', () => {
+                textoSobreNos.setAttribute('contenteditable', 'true');
+                textoSobreNos.classList.add('bg-white', 'border', 'p-3', 'rounded', 'shadow-sm');
+                textoSobreNos.focus();
+                btnEditarSobre.classList.add('d-none');
+                btnSalvarSobre.classList.remove('d-none');
+            });
+
+            btnSalvarSobre.addEventListener('click', () => {
+                textoSobreNos.removeAttribute('contenteditable');
+                textoSobreNos.classList.remove('bg-white', 'border', 'p-3', 'rounded', 'shadow-sm');
+                localStorage.setItem('fotecta_sobrenos_text', textoSobreNos.innerHTML);
+                btnSalvarSobre.classList.add('d-none');
+                btnEditarSobre.classList.remove('d-none');
+            });
+        }
+    });
+</script>
+{% endblock %}
