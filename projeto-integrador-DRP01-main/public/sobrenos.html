@@ -4,69 +4,99 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sobre nós | FOTECTA</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
     <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/accessibility.css" />
+    <link rel="stylesheet" href="/acessibilidade.css" />
   </head>
   <body>
-    <header>
-      <div class="brand-wrap">
-        <span class="brand-avatar"></span>
-        <div class="brand">FOTECTA</div>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="FOTECTA, página inicial">FOTECTA</a>
+        <nav aria-label="Navegação principal">
+          <a href="/">Home</a>
+          <a href="/#busca">Encontrar fotógrafo</a>
+          <a href="/#login">Entrar</a>
+          <a href="/#cadastro">Cadastrar</a>
+          <a href="/#sobrenos" class="nav-panel-link">ℹ️ Sobre nós</a>
+          <div class="accessibility-tools" role="group" aria-label="Opções de acessibilidade">
+            <button id="btn-alto-contraste" type="button" aria-pressed="false" title="Alternar alto contraste">Contraste</button>
+            <button id="btn-aumentar-texto" type="button" title="Aumentar tamanho do texto">A+</button>
+            <button id="btn-diminuir-texto" type="button" title="Diminuir tamanho do texto">A-</button>
+            <button id="btn-restaurar-texto" type="button" title="Restaurar tamanho do texto">A</button>
+          </div>
+        </nav>
       </div>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/login">Login</a>
-        <a href="/cadastro">Cadastre-se</a>
-        <a href="/sobrenos">Sobre nós</a>
-      </nav>
     </header>
 
-    <main class="page-shell story-shell">
-      <div class="story-card about-card">
-        <div class="story-header about-header">
+    <main class="page-shell story-shell" style="max-width: 960px; margin: 2rem auto; padding: 0 1.5rem;">
+      <div class="story-card about-card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 2rem; margin-bottom: 2rem;">
+        <div class="story-header about-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
           <div>
-            <span class="pill">Nossa missão</span>
-            <h1>Sobre o Projeto</h1>
+            <span class="pill" style="display: inline-block; background: #e0f2fe; color: #0369a1; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.5rem;">Nossa missão</span>
+            <h1 style="margin: 0; font-size: 1.8rem;">Sobre o Projeto FOTECTA</h1>
           </div>
           <div class="about-actions">
-            <button id="btnEditarSobre" class="secondary hidden" type="button">Editar Texto</button>
-            <button id="btnSalvarSobre" class="hidden" type="button">Salvar</button>
+            <button id="btnEditarSobre" class="button button-secondary hidden" type="button" style="display: none;">Editar Texto</button>
+            <button id="btnSalvarSobre" class="button button-primary hidden" type="button" style="display: none;">Salvar</button>
           </div>
         </div>
 
-        <div id="textoSobreNos" class="about-text">
-          Este projeto foi criado em 2026 pelo Grupo 9 da turma de TI da UNIVESP. Grupo composto pelos alunos: Gabriela Sampaio da Silva, Gustavo Santos Lima de Oliveira, Ivani Santos André, Jacqueline Santana Nascimento Benevides, Leonardo Quaresma da Silva, Maria José de Sousa, Otávio Augusto Costa e Victor Gabriel Santos Magalhães.
+        <div id="textoSobreNos" class="about-text" style="font-size: 1.05rem; line-height: 1.7; color: var(--text-color);">
+          Este projeto foi desenvolvido em 2026 pelo <strong>Grupo 9</strong> da turma de Tecnologia da Informação da <strong>UNIVESP (Universidade Virtual do Estado de São Paulo)</strong> para a disciplina de Projeto Integrador II.<br><br>
+          <strong>Integrantes do grupo:</strong> Gabriela Sampaio da Silva, Gustavo Santos Lima de Oliveira, Ivani Santos André, Jacqueline Santana Nascimento Benevides, Leonardo Quaresma da Silva, Maria José de Sousa, Otávio Augusto Costa e Victor Gabriel Santos Magalhães.<br><br>
+          O objetivo central da FOTECTA é conectar clientes a fotógrafos autônomos de maneira justa, ética e transparente, promovendo visibilidade digital, segurança nas negociações, avaliações reais de clientes verificados e acessibilidade universal (WCAG / e-MAG).
         </div>
       </div>
 
-      <div class="story-card faq-card">
-        <h2>Dúvidas Frequentes (FAQ)</h2>
+      <div class="story-card faq-card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 2rem;">
+        <h2 style="margin-top: 0; font-size: 1.5rem;">Dúvidas Frequentes (FAQ)</h2>
 
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary>Esqueci minha senha, como recupero?</summary>
-            <div class="faq-answer">
-              Caso você erre a senha 3 vezes seguidas na tela de Login, o sistema será bloqueado temporariamente por segurança. Você será direcionado para uma página onde deverá informar seu e-mail e sua <strong>Data de Nascimento</strong>. O administrador avaliará sua solicitação e, após aprovada, sua senha retornará para <code>fotecta123</code>. Recomendamos trocá-la assim que acessar a conta novamente!
+        <div class="faq-list" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.25rem;">
+          <details class="faq-item" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 1rem;">
+            <summary style="font-weight: 600; cursor: pointer; outline: none;">Como funciona a busca por geolocalização e proximidade?</summary>
+            <div class="faq-answer" style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+              Ao clicar no botão <strong>"📍 Perto de mim (GPS)"</strong> ou ativar o mapa interativo, a plataforma utiliza a API de geolocalização do navegador e calcula com precisão a distância geodésica em quilômetros até cada fotógrafo cadastrado através da <em>fórmula de Haversine</em>.
             </div>
           </details>
 
-          <details class="faq-item">
-            <summary>Como entro em contato com um Fotógrafo/Cliente?</summary>
-            <div class="faq-answer">
-              A plataforma FOTECTA permite que você encontre os profissionais, visualize o portfólio completo, e clique no botão <strong>Entrar em Contato</strong>. Isso abrirá automaticamente o seu aplicativo de e-mail padrão para você iniciar a conversa diretamente com o profissional. Fotógrafos também possuem acesso às redes sociais cadastradas e WhatsApp nos perfis públicos.
+          <details class="faq-item" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 1rem;">
+            <summary style="font-weight: 600; cursor: pointer; outline: none;">Como entro em contato e negocio com o profissional?</summary>
+            <div class="faq-answer" style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+              Você pode clicar em <strong>"Solicitar orçamento"</strong> no perfil público do profissional, informando a data desejada e sua proposta de valor. Uma solicitação é criada e você poderá conversar diretamente com o fotógrafo em tempo real pelo <strong>Chat Integrado</strong>.
             </div>
           </details>
 
-          <details class="faq-item">
-            <summary>Como funciona o sistema de avaliações?</summary>
-            <div class="faq-answer">
-              Clientes que marcam fotógrafos como Favoritos (❤️) podem deixar depoimentos e notas (de 1 a 5 estrelas). Essas notas constroem a média do profissional na página de busca. O fotógrafo, por sua vez, pode ler e responder as avaliações diretamente pela <em>dashboard</em> (Painel) de controle dele.
+          <details class="faq-item" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 1rem;">
+            <summary style="font-weight: 600; cursor: pointer; outline: none;">Como funciona o sistema de avaliações?</summary>
+            <div class="faq-answer" style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+              Clientes cadastrados podem deixar notas de 1 a 5 estrelas e depoimentos nos perfis públicos. O profissional pode responder às avaliações diretamente pelo seu painel administrativo, construindo sua reputação transparente na plataforma.
+            </div>
+          </details>
+
+          <details class="faq-item" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 1rem;">
+            <summary style="font-weight: 600; cursor: pointer; outline: none;">Esqueci minha senha, como recupero?</summary>
+            <div class="faq-answer" style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+              Na seção de Login, preencha o formulário <strong>"Esqueceu sua senha?"</strong> informando seu e-mail cadastrado. A solicitação é enviada para análise e aprovação pelo administrador do sistema no painel de controle.
             </div>
           </details>
         </div>
       </div>
     </main>
 
+    <footer class="site-footer" style="margin-top: 3rem;">
+      <span>FOTECTA &copy; 2026 - Conectando profissionais e clientes</span>
+      <div style="display: flex; gap: 1.25rem;">
+        <a href="/">Home</a>
+        <a href="/#busca">Encontrar fotógrafo</a>
+        <a href="/#sobrenos">ℹ️ Sobre nós & FAQ</a>
+      </div>
+    </footer>
+
+    <script src="/acessibilidade.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
         const textoSobreNos = document.getElementById('textoSobreNos');
@@ -81,33 +111,32 @@
         }
 
         try {
-          const response = await fetch('/api/me', { credentials: 'same-origin' });
+          const response = await fetch('/api/me');
           const data = await response.json();
 
           if (data && data.user && data.user.tipo === 'admin') {
-            btnEditarSobre.classList.remove('hidden');
+            btnEditarSobre.style.display = 'inline-flex';
 
             btnEditarSobre.addEventListener('click', () => {
               textoSobreNos.setAttribute('contenteditable', 'true');
-              textoSobreNos.classList.add('about-editing');
+              textoSobreNos.style.outline = '2px dashed var(--primary-color)';
+              textoSobreNos.style.padding = '0.5rem';
               textoSobreNos.focus();
-              btnEditarSobre.classList.add('hidden');
-              btnSalvarSobre.classList.remove('hidden');
+              btnEditarSobre.style.display = 'none';
+              btnSalvarSobre.style.display = 'inline-flex';
             });
 
             btnSalvarSobre.addEventListener('click', () => {
               textoSobreNos.removeAttribute('contenteditable');
-              textoSobreNos.classList.remove('about-editing');
+              textoSobreNos.style.outline = '';
+              textoSobreNos.style.padding = '';
               localStorage.setItem('fotecta_sobrenos_text', textoSobreNos.innerHTML);
-              btnSalvarSobre.classList.add('hidden');
-              btnEditarSobre.classList.remove('hidden');
+              btnSalvarSobre.style.display = 'none';
+              btnEditarSobre.style.display = 'inline-flex';
             });
           }
-        } catch (error) {
-          console.error('Erro ao verificar usuário admin:', error);
-        }
+        } catch (_) {}
       });
     </script>
-    <script src="/accessibility.js"></script>
   </body>
 </html>
