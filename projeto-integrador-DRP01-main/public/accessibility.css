@@ -1,0 +1,155 @@
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.skip-link {
+  position: fixed;
+  top: -5rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.accessibility-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+
+.accessibility-tools button {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #64748b;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #1f2937;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.accessibility-tools button:hover,
+.accessibility-tools button[aria-pressed="true"] {
+  background: #1f2937;
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.alto-contraste {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+body.alto-contraste header,
+body.alto-contraste main,
+body.alto-contraste section,
+body.alto-contraste article,
+body.alto-contraste .card,
+body.alto-contraste .auth-card,
+body.alto-contraste .story-card,
+body.alto-contraste .hero,
+body.alto-contraste .hero-panel,
+body.alto-contraste .search-hero,
+body.alto-contraste .dashboard-section,
+body.alto-contraste .profile-card,
+body.alto-contraste footer {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+  box-shadow: none !important;
+}
+
+body.alto-contraste h1,
+body.alto-contraste h2,
+body.alto-contraste h3,
+body.alto-contraste h4,
+body.alto-contraste p,
+body.alto-contraste label,
+body.alto-contraste small,
+body.alto-contraste strong,
+body.alto-contraste span,
+body.alto-contraste li {
+  color: #fff !important;
+}
+
+body.alto-contraste a {
+  color: #ff0 !important;
+}
+
+body.alto-contraste button,
+body.alto-contraste input,
+body.alto-contraste select,
+body.alto-contraste textarea {
+  border-color: #ff0 !important;
+}
+
+body.alto-contraste input,
+body.alto-contraste select,
+body.alto-contraste textarea {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+body.alto-contraste input::placeholder,
+body.alto-contraste textarea::placeholder {
+  color: #ddd !important;
+}
+
+body.alto-contraste button,
+body.alto-contraste .btn,
+body.alto-contraste .btn-primary {
+  background: #ff0 !important;
+  color: #000 !important;
+}
+
+body.alto-contraste .accessibility-tools button[aria-pressed="true"] {
+  background: #ff0 !important;
+  color: #000 !important;
+}
+
+@media (max-width: 600px) {
+  .accessibility-tools {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

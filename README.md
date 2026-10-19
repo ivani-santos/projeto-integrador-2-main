@@ -1,41 +1,17 @@
-<h1 id="readme-top"> Projeto Integrador em Computação I</h1>
+<h1 id="readme-top"> Projeto Integrador em Computação II</h1>
 
-<details>
-  <summary><b>Conteúdo</b></summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">Sobre o Projeto Integrador</a>
-      <ul>
-        <li><a href="#methodology">Metodologia</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Iniciando o Projeto</a>
-      <ul>
-        <li><a href="#prerequisites">Pré-requisitos</a></li>
-        <li><a href="#installation">Instalação</a></li>
-      </ul>
-    </li>
-    <li><a href="#contributing">Contribuições</a>
-    <ul>
-        <li><a href="#how-do-it">Como Fazer</a></li>
-      </ul>
-    </li>
-    <li><a href="#license">Licença</a></li>
-  </ol>
-</details>
 
 <h2 id="about-the-project"><p align="center">Sobre o Projeto Integrador</p></h2>
 
-Trata-se de uma atividade curricular obrigatória, consiste na resolução de um problema real contextualizado na profissão em que o curso de Bacharelado em Tecnologia da Informação está inserido. Em grupo, tivemos que delimitar um problema a partir do tema norteador da disciplina de Computação I, propondo uma solução aplicável e usando os conhecimentos estudados nas disciplinas cursadas até o momento.
+Trata-se de uma atividade curricular obrigatória, consiste na resolução de um problema real contextualizado na profissão em que o cursos estão inserido. Em grupo, tivemos que delimitar um problema a partir do tema norteador da disciplina de Projeto Integrador em Computação II, propondo uma solução aplicável e usando os conhecimentos estudados nas disciplinas cursadas até o momento.
 
-<b>Tema norteador:</b> tuioiutr
+<b>Tema norteador:</b> Desenvolver um software com framework web que utilize banco de dados, inclua script web (Javascript), nuvem, uso de API, acessibilidade, controle de versão e testes. Opcionalmente, incluir análise de dados.
 
-<b>Tema escolhido pelo grupo com base no tema norteador da Univesp:</b> wertuioiutui
+<b>Tema escolhido pelo grupo com base no tema norteador da Univesp:</b> Desenvolvimento de um software com framework web para a divulgação de portfólio de profissionais autônomos do seguimento fotográfico, utilizando banco de dados para o armazenamento de informações, JavaScript como linguagem de programação, API no desenvolvimento, nuvem para armazenamento, acessibilidade na utilização, testes para controle e controle de versão para registro da evolução do grupo.
 
 <b>Título:</b> FOTECTA - Como conectar fotógrafos com novos clientes
 
-<b>Orientadora:</b> qwertuio
+<b>Orientadora:</b> Ana Mariele Domingues
 
 <b>Integrantes:</b> Gabriela Sampaio da Silva, Gustavo Santos Lima de Oliveira, Ivani Santos André, Jacqueline Santana Nascimento Benevides, Leonardo Quaresma da Silva, Maria José de Sousa, Otávio Augusto Costa e Victor Gabriel Santos Magalhães
 
@@ -69,9 +45,10 @@ O FOTECTA é uma plataforma para conectar clientes e fotógrafos, com:
 
 ## Como rodar
 
-No diretório do projeto:
+No diretório/terminal do projeto:
 
 ```bash
+cd ".\projeto-integrador-DRP01-main"
 npm install
 npm start
 ```
@@ -115,6 +92,10 @@ Arquivos relevantes:
 - Dashboard do fotógrafo
 - Dashboard do admin
 - Reset de dados demo
+
+## Acessibilidade
+
+Todas as páginas incluem controles para aumentar, diminuir e restaurar o tamanho do texto, ativar o alto contraste e pular diretamente para o conteúdo principal. As preferências de texto e contraste são salvas no navegador. A interface também oferece foco visível para navegação por teclado e avisos compatíveis com leitores de tela.
 
 ## Como testar
 
