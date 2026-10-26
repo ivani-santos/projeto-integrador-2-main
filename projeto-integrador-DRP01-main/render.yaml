@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: fotecta
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      # Neon PostgreSQL (DBaaS com SSL conforme Figura 7 do Relatório)
+      - key: DATABASE_URL
+        sync: false
+      # Cloudinary (Armazenamento de imagens na nuvem conforme Figura 7)
+      - key: CLOUDINARY_URL
+        sync: false
+

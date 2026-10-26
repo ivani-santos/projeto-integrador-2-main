@@ -4,109 +4,551 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Painel Admin | FOTECTA</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
     <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/accessibility.css" />
+    <link rel="stylesheet" href="/acessibilidade.css" />
+    <style>
+      /* Modal de Edição com Alto Contraste e Sobreposição Opaca */
+      dialog#modal-admin-edit-user {
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 480px;
+        width: 92%;
+        background-color: #ffffff !important;
+        color: #111111 !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.08);
+      }
+      dialog#modal-admin-edit-user::backdrop {
+        background-color: rgba(15, 23, 42, 0.75) !important;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+      dialog#modal-admin-edit-user input,
+      dialog#modal-admin-edit-user select {
+        background-color: #ffffff !important;
+        color: #111111 !important;
+        border: 1px solid #94a3b8;
+      }
+      dialog#modal-admin-edit-user input:focus,
+      dialog#modal-admin-edit-user select:focus {
+        border-color: #0b5ea8;
+        outline: 3px solid rgba(11, 94, 168, 0.25);
+      }
+      dialog#modal-admin-edit-user input:disabled {
+        background-color: #f1f5f9 !important;
+        color: #64748b !important;
+        border-color: #cbd5e1 !important;
+        opacity: 0.9;
+        cursor: not-allowed;
+      }
+
+      /* Suporte ao modo Alto Contraste */
+      body.alto-contraste dialog#modal-admin-edit-user {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #ffff00 !important;
+        box-shadow: 0 0 0 2px #000000, 0 0 0 5px #ffff00 !important;
+      }
+      body.alto-contraste dialog#modal-admin-edit-user::backdrop {
+        background-color: rgba(0, 0, 0, 0.92) !important;
+      }
+      body.alto-contraste dialog#modal-admin-edit-user input,
+      body.alto-contraste dialog#modal-admin-edit-user select {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border-color: #ffff00 !important;
+      }
+      body.alto-contraste dialog#modal-admin-edit-user input:disabled {
+        background-color: #1a1a1a !important;
+        color: #888888 !important;
+        border-color: #555555 !important;
+      }
+      body.alto-contraste .metric-card,
+      body.alto-contraste .dashboard-panel {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border-color: #ffffff !important;
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <div class="brand-wrap">
-        <span class="brand-avatar"></span>
-        <div class="brand">FOTECTA</div>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="FOTECTA, página inicial">FOTECTA</a>
+        <nav aria-label="Navegação do administrador">
+          <a href="/">Home</a>
+          <a href="/#sobrenos">ℹ️ Sobre nós</a>
+          <a href="/admin" class="nav-panel-link">Painel Admin</a>
+          <button id="btn-admin-logout" class="nav-button" type="button">Sair</button>
+          <div class="accessibility-tools" role="group" aria-label="Opções de acessibilidade">
+            <button id="btn-alto-contraste" type="button" aria-pressed="false" title="Alternar alto contraste">Contraste</button>
+            <button id="btn-aumentar-texto" type="button" title="Aumentar tamanho do texto">A+</button>
+            <button id="btn-diminuir-texto" type="button" title="Diminuir tamanho do texto">A-</button>
+            <button id="btn-restaurar-texto" type="button" title="Restaurar tamanho do texto">A</button>
+          </div>
+        </nav>
       </div>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/admin">Admin</a>
-        <button class="secondary" onclick="fetch('/logout',{method:'POST',credentials:'same-origin'}).then(()=>window.location.href='/')">Sair</button>
-      </nav>
     </header>
 
-    <main class="dashboard-shell">
-      <div class="dashboard-header">
+    <main class="dashboard-shell" style="max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem;">
+      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
         <div>
-          <h1>Painel do administrador</h1>
-          <p id="user-name">Carregando...</p>
+          <h1 style="margin: 0; font-size: 1.8rem;">Painel do Administrador</h1>
+          <p id="admin-user-info" style="margin: 0.3rem 0 0 0; color: var(--text-muted);">Carregando sessão...</p>
         </div>
-        <button onclick="fetch('/api/admin/reset-seed',{method:'POST',credentials:'same-origin'}).then(r=>r.json()).then(()=>location.reload())">Resetar dados demo</button>
+        <button id="btn-reset-demo" class="button button-secondary" type="button" title="Restaura os usuários e portfólios originais do sistema">Resetar dados demo</button>
       </div>
 
-      <div class="dashboard-grid">
-        <div class="metric-card">
-          <div class="label">Usuários totais</div>
-          <strong>3</strong>
+      <!-- Alerta em Destaque de Denúncias Pendentes -->
+      <div id="admin-alert-denuncias" style="display: none; background: #fef2f2; border: 1px solid #f87171; color: #991b1b; padding: 1rem 1.25rem; border-radius: 6px; margin-bottom: 1.5rem; font-weight: 500; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div>
+          🚨 <strong>Alerta de Moderação:</strong> Há <span id="alert-denuncias-count" style="font-weight: 700;">0</span> denúncia(s) pendente(s) aguardando análise da administração.
         </div>
-        <div class="metric-card">
-          <div class="label">Clientes</div>
-          <strong>1</strong>
+        <a href="#secao-denuncias" class="button button-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.85rem; background: #ffffff; color: #991b1b; border-color: #f87171; text-decoration: none; font-weight: 600;">Ver denúncias</a>
+      </div>
+
+      <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+        <div class="metric-card" style="background: var(--surface-color); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 6px;">
+          <div class="label" style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Usuários totais</div>
+          <strong id="metric-total" style="font-size: 2.2rem; display: block; margin-top: 0.4rem;">-</strong>
         </div>
-        <div class="metric-card">
-          <div class="label">Fotógrafos</div>
-          <strong>1</strong>
+        <div class="metric-card" style="background: var(--surface-color); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 6px;">
+          <div class="label" style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Clientes</div>
+          <strong id="metric-clientes" style="font-size: 2.2rem; display: block; margin-top: 0.4rem; color: #0284c7;">-</strong>
         </div>
-        <div class="metric-card">
-          <div class="label">Solicitações</div>
-          <strong>0</strong>
+        <div class="metric-card" style="background: var(--surface-color); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 6px;">
+          <div class="label" style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Fotógrafos</div>
+          <strong id="metric-fotografos" style="font-size: 2.2rem; display: block; margin-top: 0.4rem; color: #16a34a;">-</strong>
+        </div>
+        <div class="metric-card" style="background: var(--surface-color); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 6px;">
+          <div class="label" style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Solicitações de Senha</div>
+          <strong id="metric-requests" style="font-size: 2.2rem; display: block; margin-top: 0.4rem; color: #d97706;">-</strong>
+        </div>
+        <div class="metric-card" style="background: var(--surface-color); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 6px;">
+          <div class="label" style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Denúncias Pendentes</div>
+          <strong id="metric-denuncias" style="font-size: 2.2rem; display: block; margin-top: 0.4rem; color: #dc2626;">0</strong>
         </div>
       </div>
 
-      <section class="dashboard-panel">
-        <h2>Resumo da plataforma</h2>
-        <div class="summary-box">
-          <strong>Gestão centralizada de usuários e contas</strong>
-          <p>Monitore o volume de clientes, fotógrafos e solicitações de recuperação de senha em um único painel.</p>
+      <!-- Seção: Denúncias e Moderação da Comunidade -->
+      <section id="secao-denuncias" class="dashboard-panel" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <h2 style="margin: 0; font-size: 1.3rem;">Denúncias e Moderação da Comunidade</h2>
+          <span id="badge-denuncias-count" style="background: #fee2e2; color: #991b1b; font-size: 0.8rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 999px;">0 pendentes</span>
         </div>
-        <div class="inline-actions">
-          <button>Exportar relatório</button>
-          <button class="secondary">Ver usuários</button>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Relatórios de conduta enviados por usuários diretamente no chat de mensagens dos projetos.</p>
+        <div id="denuncias-container" style="overflow-x: auto;">
+          <p class="status">Carregando denúncias...</p>
         </div>
       </section>
 
-      <section class="dashboard-panel">
-        <h2>Últimas ações</h2>
-        <div class="stack-list">
-          <div class="list-item">
-            <strong>Cliente Demo</strong>
-            <span class="status-badge success">Ativo</span>
-          </div>
-          <div class="list-item">
-            <strong>Fotógrafo Demo</strong>
-            <span class="status-badge success">Ativo</span>
-          </div>
-          <div class="list-item">
-            <strong>Admin Demo</strong>
-            <span class="status-badge warning">Gerente</span>
-          </div>
+      <!-- Seção: Solicitações de Recuperação de Senha -->
+      <section class="dashboard-panel" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 2rem;">
+        <h2 style="margin-top: 0; font-size: 1.3rem;">Solicitações de Recuperação de Senha</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Pedidos enviados por usuários via formulário de recuperação.</p>
+        <div id="requests-container" style="overflow-x: auto;">
+          <p class="status">Carregando solicitações...</p>
         </div>
       </section>
 
-      <section class="dashboard-panel">
-        <h2>Solicitações de recuperação</h2>
-        <div class="table-card">
-          <table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>E-mail</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Cliente Demo</td>
-                <td>cliente@fotecta.com</td>
-                <td><span class="status-badge warning">Pendente</span></td>
-              </tr>
-              <tr>
-                <td>Fotógrafo Demo</td>
-                <td>fotografo@fotecta.com</td>
-                <td><span class="status-badge success">Aprovado</span></td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- Seção: Usuários Cadastrados na Plataforma -->
+      <section class="dashboard-panel" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem;">
+        <h2 style="margin-top: 0; font-size: 1.3rem;">Usuários Cadastrados na Plataforma</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Gestão de clientes, profissionais e administradores ativos. Você pode editar dados ou excluir contas.</p>
+        <div id="users-container" style="overflow-x: auto;">
+          <p class="status">Carregando usuários...</p>
         </div>
       </section>
     </main>
 
-    <script src="/app.js"></script>
-    <script src="/accessibility.js"></script>
+    <!-- Modal de Edição de Usuário pelo Admin -->
+    <dialog id="modal-admin-edit-user">
+      <form id="form-admin-edit-user" method="dialog">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0; font-size: 1.3rem; font-weight: 700;">Editar Dados do Usuário</h3>
+          <button type="button" onclick="closeEditModal()" style="background: none; border: none; font-size: 1.25rem; line-height: 1; cursor: pointer; color: inherit; padding: 0.25rem 0.5rem; border-radius: 4px;" title="Fechar">✕</button>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Atualize o nome ou redefina a senha deste usuário diretamente como administrador.</p>
+        
+        <input type="hidden" id="edit-user-id" />
+        <div style="margin-bottom: 1.1rem;">
+          <label for="edit-user-nome" style="display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.85rem;">Nome Completo</label>
+          <input type="text" id="edit-user-nome" required style="width: 100%; padding: 0.65rem 0.75rem; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;" />
+        </div>
+
+        <div style="margin-bottom: 1.1rem;">
+          <label for="edit-user-email" style="display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.85rem;">E-mail (Identificador único)</label>
+          <input type="email" id="edit-user-email" readonly disabled style="width: 100%; padding: 0.65rem 0.75rem; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;" />
+        </div>
+
+        <div style="margin-bottom: 1.1rem;">
+          <label for="edit-user-tipo" style="display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.85rem;">Tipo de Conta</label>
+          <select id="edit-user-tipo" style="width: 100%; padding: 0.65rem 0.75rem; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;">
+            <option value="cliente">Cliente</option>
+            <option value="fotografo">Fotógrafo</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 1.75rem;">
+          <label for="edit-user-senha" style="display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.85rem;">Nova Senha</label>
+          <input type="password" id="edit-user-senha" placeholder="Deixe em branco para manter a atual" autocomplete="new-password" style="width: 100%; padding: 0.65rem 0.75rem; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;" />
+          <small style="display: block; color: var(--text-muted); font-size: 0.75rem; margin-top: 0.35rem;">Mínimo de 6 caracteres caso queira alterar.</small>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="button button-secondary" onclick="closeEditModal()">Cancelar</button>
+          <button type="submit" class="button button-primary">Salvar Alterações</button>
+        </div>
+      </form>
+    </dialog>
+
+    <footer class="site-footer" style="margin-top: 3rem;">
+      <span>FOTECTA &copy; 2026 - Painel Administrativo</span>
+      <div style="display: flex; gap: 1.25rem;">
+        <a href="/">Home</a>
+        <a href="/#sobrenos">ℹ️ Sobre nós</a>
+      </div>
+    </footer>
+
+    <script src="/acessibilidade.js"></script>
+    <script>
+      let currentAdminId = null;
+      let allUsers = [];
+
+      function escapeHtml(str) {
+        return String(str || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[c]);
+      }
+
+      async function loadAdminData() {
+        try {
+          const authRes = await fetch('/api/me');
+          const authData = await authRes.json();
+          if (!authData.ok || !authData.user || authData.user.tipo !== 'admin') {
+            alert('Acesso restrito a administradores.');
+            window.location.replace('/#login');
+            return;
+          }
+          currentAdminId = authData.user.id;
+          document.getElementById('admin-user-info').textContent = `Logado como: ${authData.user.nome} (${authData.user.email})`;
+        } catch (_) {
+          window.location.replace('/#login');
+          return;
+        }
+
+        // 1. Fetch Denúncias de moderação
+        try {
+          const denRes = await fetch('/api/admin/denuncias');
+          const denData = await denRes.json();
+          const denuncias = denData.denuncias || [];
+          const pendentes = denuncias.filter((d) => d.status === 'pendente');
+
+          document.getElementById('metric-denuncias').textContent = pendentes.length;
+          document.getElementById('badge-denuncias-count').textContent = `${pendentes.length} pendente(s)`;
+
+          const alertBanner = document.getElementById('admin-alert-denuncias');
+          const alertCount = document.getElementById('alert-denuncias-count');
+          if (pendentes.length > 0) {
+            alertCount.textContent = pendentes.length;
+            alertBanner.style.display = 'flex';
+          } else {
+            alertBanner.style.display = 'none';
+          }
+
+          const denContainer = document.getElementById('denuncias-container');
+          if (!denuncias.length) {
+            denContainer.innerHTML = '<p class="status">Nenhuma denúncia registrada na plataforma até o momento.</p>';
+          } else {
+            denContainer.innerHTML = `
+              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.75rem;">ID</th>
+                    <th style="padding: 0.75rem;">Denunciante</th>
+                    <th style="padding: 0.75rem;">Denunciado</th>
+                    <th style="padding: 0.75rem;">Motivo da Denúncia</th>
+                    <th style="padding: 0.75rem;">Status</th>
+                    <th style="padding: 0.75rem;">Data</th>
+                    <th style="padding: 0.75rem; text-align: right;">Ações de Moderação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${denuncias.map((d) => {
+                    const isPendente = d.status === 'pendente';
+                    const statusBadge = isPendente
+                      ? '<span class="badge" style="background: #fee2e2; color: #991b1b; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600;">Pendente</span>'
+                      : d.status === 'resolvida'
+                      ? '<span class="badge" style="background: #dcfce7; color: #166534; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600;">Resolvida</span>'
+                      : '<span class="badge" style="background: #f3f4f6; color: #4b5563; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600;">Descartada</span>';
+
+                    return `
+                      <tr style="border-bottom: 1px solid var(--border-color); ${isPendente ? 'background: rgba(239, 68, 68, 0.04);' : ''}">
+                        <td style="padding: 0.75rem;">#${d.id}</td>
+                        <td style="padding: 0.75rem;">${escapeHtml(d.denunciante_nome)} <small style="color:var(--text-muted);">(ID ${d.denunciante_id})</small></td>
+                        <td style="padding: 0.75rem;"><strong>${escapeHtml(d.denunciado_nome)}</strong> <small style="color:var(--text-muted);">(ID ${d.denunciado_id})</small></td>
+                        <td style="padding: 0.75rem; max-width: 250px;"><em>"${escapeHtml(d.motivo)}"</em></td>
+                        <td style="padding: 0.75rem;">${statusBadge}</td>
+                        <td style="padding: 0.75rem;">${new Date(d.created_at).toLocaleString('pt-BR')}</td>
+                        <td style="padding: 0.75rem; text-align: right; white-space: nowrap;">
+                          ${isPendente ? `
+                            <button class="button button-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; min-height: 1.9rem;" title="Marcar denúncia como resolvida" onclick="resolverDenuncia(${d.id}, 'resolvida')">✓ Resolver</button>
+                            <button class="button button-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; min-height: 1.9rem;" title="Descartar denúncia improcedente" onclick="resolverDenuncia(${d.id}, 'descartada')">✕ Descartar</button>
+                            <button class="button button-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; min-height: 1.9rem;" title="Editar dados do denunciado" onclick="openEditUserModal(${d.denunciado_id})">✏️ Usuário</button>
+                            <button class="button button-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; min-height: 1.9rem; color: #dc2626; border-color: #fca5a5;" title="Excluir e banir o usuário denunciado" onclick="deleteUser(${d.denunciado_id}, '${escapeHtml(d.denunciado_nome)}')">🗑️ Excluir</button>
+                          ` : `
+                            <span style="color: var(--text-muted); font-size: 0.8rem;">Concluída</span>
+                          `}
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            `;
+          }
+        } catch (err) {
+          document.getElementById('denuncias-container').innerHTML = `<p class="status">Erro ao carregar denúncias: ${escapeHtml(err.message)}</p>`;
+        }
+
+        // 2. Fetch users & calculate metrics
+        try {
+          const usersRes = await fetch('/api/users');
+          const usersData = await usersRes.json();
+          allUsers = usersData.users || [];
+          document.getElementById('metric-total').textContent = allUsers.length;
+          document.getElementById('metric-clientes').textContent = allUsers.filter((u) => u.tipo === 'cliente').length;
+          document.getElementById('metric-fotografos').textContent = allUsers.filter((u) => u.tipo === 'fotografo').length;
+
+          const usersContainer = document.getElementById('users-container');
+          if (!allUsers.length) {
+            usersContainer.innerHTML = '<p class="status">Nenhum usuário cadastrado.</p>';
+          } else {
+            usersContainer.innerHTML = `
+              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.75rem;">Nome</th>
+                    <th style="padding: 0.75rem;">E-mail</th>
+                    <th style="padding: 0.75rem;">Tipo</th>
+                    <th style="padding: 0.75rem;">Localização</th>
+                    <th style="padding: 0.75rem;">Data de Cadastro</th>
+                    <th style="padding: 0.75rem; text-align: right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${allUsers.map((u) => `
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 0.75rem;"><strong>${escapeHtml(u.nome)}</strong></td>
+                      <td style="padding: 0.75rem;">${escapeHtml(u.email)}</td>
+                      <td style="padding: 0.75rem;"><span class="badge" style="background: ${u.tipo === 'admin' ? '#fef3c7' : u.tipo === 'fotografo' ? '#dcfce7' : '#e0f2fe'}; color: ${u.tipo === 'admin' ? '#92400e' : u.tipo === 'fotografo' ? '#166534' : '#075985'}; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">${escapeHtml(u.tipo)}</span></td>
+                      <td style="padding: 0.75rem;">${escapeHtml(u.localizacao || 'Não informada')}</td>
+                      <td style="padding: 0.75rem;">${new Date(u.created_at).toLocaleDateString('pt-BR')}</td>
+                      <td style="padding: 0.75rem; text-align: right; white-space: nowrap;">
+                        <button class="button button-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; min-height: 1.9rem;" onclick="openEditUserModal(${u.id})">✏️ Editar</button>
+                        ${u.id !== currentAdminId ? `
+                          <button class="button button-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; min-height: 1.9rem; color: #dc2626; border-color: #fca5a5;" onclick="deleteUser(${u.id}, '${escapeHtml(u.nome)}')">🗑️ Excluir</button>
+                        ` : ''}
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `;
+          }
+        } catch (err) {
+          document.getElementById('users-container').innerHTML = `<p class="status">Erro ao carregar usuários: ${escapeHtml(err.message)}</p>`;
+        }
+
+        // 3. Fetch reset requests
+        try {
+          const reqRes = await fetch('/api/reset-requests');
+          const reqData = await reqRes.json();
+          const requests = reqData.requests || [];
+          document.getElementById('metric-requests').textContent = requests.length;
+
+          const reqContainer = document.getElementById('requests-container');
+          if (!requests.length) {
+            reqContainer.innerHTML = '<p class="status">Nenhuma solicitação de recuperação pendente no momento.</p>';
+          } else {
+            reqContainer.innerHTML = `
+              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.75rem;">Nome</th>
+                    <th style="padding: 0.75rem;">E-mail</th>
+                    <th style="padding: 0.75rem;">Data da Solicitação</th>
+                    <th style="padding: 0.75rem; text-align: right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${requests.map((r) => `
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 0.75rem;"><strong>${escapeHtml(r.nome)}</strong></td>
+                      <td style="padding: 0.75rem;">${escapeHtml(r.email)}</td>
+                      <td style="padding: 0.75rem;">${new Date(r.created_at).toLocaleString('pt-BR')}</td>
+                      <td style="padding: 0.75rem; text-align: right;">
+                        <button class="button button-primary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; min-height: 2rem;" onclick="approveReset('${escapeHtml(r.email)}')">Aprovar</button>
+                        <button class="button button-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; min-height: 2rem;" onclick="rejectReset('${escapeHtml(r.email)}')">Rejeitar</button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `;
+          }
+        } catch (err) {
+          document.getElementById('requests-container').innerHTML = `<p class="status">Erro ao carregar solicitações: ${escapeHtml(err.message)}</p>`;
+        }
+      }
+
+      // User Management Modal & Actions
+      function openEditUserModal(userId) {
+        const user = allUsers.find((u) => u.id === userId);
+        if (!user) {
+          alert('Usuário não localizado na lista atual.');
+          return;
+        }
+        document.getElementById('edit-user-id').value = user.id;
+        document.getElementById('edit-user-nome').value = user.nome || '';
+        document.getElementById('edit-user-email').value = user.email || '';
+        document.getElementById('edit-user-tipo').value = user.tipo || 'cliente';
+        document.getElementById('edit-user-senha').value = '';
+        const modal = document.getElementById('modal-admin-edit-user');
+        if (modal.showModal) modal.showModal();
+        else modal.style.display = 'block';
+      }
+
+      function closeEditModal() {
+        const modal = document.getElementById('modal-admin-edit-user');
+        if (modal.close) modal.close();
+        else modal.style.display = 'none';
+      }
+
+      document.getElementById('modal-admin-edit-user')?.addEventListener('click', (event) => {
+        const dialog = document.getElementById('modal-admin-edit-user');
+        if (event.target === dialog) {
+          closeEditModal();
+        }
+      });
+
+      document.getElementById('form-admin-edit-user')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('edit-user-id').value;
+        const nome = document.getElementById('edit-user-nome').value.trim();
+        const tipo = document.getElementById('edit-user-tipo').value;
+        const senha = document.getElementById('edit-user-senha').value.trim();
+
+        if (!nome) {
+          alert('Por favor, informe o nome do usuário.');
+          return;
+        }
+        if (senha && senha.length < 6) {
+          alert('A nova senha deve ter no mínimo 6 caracteres.');
+          return;
+        }
+
+        try {
+          const payload = { nome, tipo };
+          if (senha) payload.senha = senha;
+          const res = await fetch(`/api/admin/users/${id}`, {
+            method: 'PUT',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) throw new Error(data.message || 'Erro ao atualizar dados.');
+          alert(data.message || 'Usuário atualizado com sucesso.');
+          closeEditModal();
+          loadAdminData();
+        } catch (err) {
+          alert('Erro ao atualizar usuário: ' + err.message);
+        }
+      });
+
+      async function deleteUser(id, nome) {
+        if (!confirm(`ATENÇÃO: Deseja realmente excluir o usuário "${nome}" (ID ${id}) e todos os seus projetos, mensagens e fotos? Esta ação é definitiva.`)) {
+          return;
+        }
+        try {
+          const res = await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+          const data = await res.json();
+          if (!res.ok || !data.ok) throw new Error(data.message || 'Erro ao excluir usuário.');
+          alert(data.message || 'Usuário excluído com sucesso.');
+          loadAdminData();
+        } catch (err) {
+          alert('Erro ao excluir usuário: ' + err.message);
+        }
+      }
+
+      // Community Reports Actions
+      async function resolverDenuncia(id, status) {
+        const acao = status === 'resolvida' ? 'marcar como resolvida' : 'descartar';
+        if (!confirm(`Deseja realmente ${acao} a denúncia #${id}?`)) return;
+        try {
+          const res = await fetch(`/api/admin/denuncias/${id}/resolver`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ status }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) throw new Error(data.message || 'Erro ao atualizar denúncia.');
+          alert(data.message || 'Denúncia atualizada com sucesso.');
+          loadAdminData();
+        } catch (err) {
+          alert('Erro ao atualizar denúncia: ' + err.message);
+        }
+      }
+
+      // Password Reset Requests
+      async function approveReset(email) {
+        if (!confirm(`Aprovar a recuperação de senha para ${email}? A senha do usuário será redefinida temporariamente.`)) return;
+        try {
+          const res = await fetch(`/api/reset-requests/${encodeURIComponent(email)}/approve`, { method: 'POST' });
+          const data = await res.json();
+          alert(data.message || 'Solicitação aprovada com sucesso.');
+          loadAdminData();
+        } catch (err) {
+          alert('Erro ao aprovar solicitação: ' + err.message);
+        }
+      }
+
+      async function rejectReset(email) {
+        if (!confirm(`Rejeitar e remover a solicitação de ${email}?`)) return;
+        try {
+          const res = await fetch(`/api/reset-requests/${encodeURIComponent(email)}/reject`, { method: 'POST' });
+          const data = await res.json();
+          alert(data.message || 'Solicitação rejeitada.');
+          loadAdminData();
+        } catch (err) {
+          alert('Erro ao rejeitar solicitação: ' + err.message);
+        }
+      }
+
+      document.getElementById('btn-admin-logout')?.addEventListener('click', async () => {
+        await fetch('/api/logout', { method: 'POST' });
+        window.location.replace('/#inicio');
+      });
+
+      document.getElementById('btn-reset-demo')?.addEventListener('click', async () => {
+        if (!confirm('Deseja resetar todos os dados demo (usuários, fotos e projetos de exemplo)?')) return;
+        try {
+          const res = await fetch('/api/admin/reset-seed', { method: 'POST' });
+          const data = await res.json();
+          if (data.ok) {
+            alert('Dados demo restaurados com sucesso.');
+            loadAdminData();
+          }
+        } catch (err) {
+          alert('Erro ao resetar dados: ' + err.message);
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', loadAdminData);
+    </script>
   </body>
 </html>
