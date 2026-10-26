@@ -1,3 +1,4 @@
+
 # requirements.txt — Versões pinadas para o projeto FOTECTA
 #
 # Este arquivo contém as dependências bloqueadas do projeto e instruções
