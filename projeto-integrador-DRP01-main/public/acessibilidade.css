@@ -1,0 +1,196 @@
+/* FOTECTA - WCAG 2.1 AA / e-MAG */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.skip-link {
+  position: fixed;
+  top: -4rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: .7rem 1rem;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top .2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+*:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+.accessibility-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  margin-left: 1.25rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--border-color);
+}
+
+.accessibility-tools button {
+  min-width: 2.2rem;
+  min-height: 2.2rem;
+  padding: .35rem .55rem;
+  border: 1px solid var(--border-dark);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font: 700 .78rem Arial, sans-serif;
+}
+
+.accessibility-tools button:hover,
+.accessibility-tools button[aria-pressed="true"] {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+}
+
+body.alto-contraste {
+  background: #000;
+  color: #fff;
+}
+
+body.alto-contraste .site-header,
+body.alto-contraste .site-footer,
+body.alto-contraste .dashboard-section,
+body.alto-contraste .photographer-section,
+body.alto-contraste .auth-section,
+body.alto-contraste .quote-section,
+body.alto-contraste .chat-section,
+body.alto-contraste .chat-card,
+body.alto-contraste .chat-header-bar,
+body.alto-contraste .chat-history,
+body.alto-contraste .chat-composer,
+body.alto-contraste .review-card,
+body.alto-contraste .review-reply,
+body.alto-contraste .card,
+body.alto-contraste .auth-form,
+body.alto-contraste .dashboard-form,
+body.alto-contraste .quick-action,
+body.alto-contraste .profile,
+body.alto-contraste .quote-form {
+  background: #000;
+  color: #fff;
+  border-color: #fff;
+}
+
+body.alto-contraste h1,
+body.alto-contraste h2,
+body.alto-contraste h3,
+body.alto-contraste h4,
+body.alto-contraste p,
+body.alto-contraste label,
+body.alto-contraste .field label,
+body.alto-contraste .section-heading p:last-child,
+body.alto-contraste .card p,
+body.alto-contraste .profile p,
+body.alto-contraste .status,
+body.alto-contraste .quick-action span,
+body.alto-contraste .auth-form p,
+body.alto-contraste .portfolio-manage-card small {
+  color: #fff;
+}
+
+body.alto-contraste a,
+body.alto-contraste .eyebrow,
+body.alto-contraste .tag,
+body.alto-contraste .site-header nav a,
+body.alto-contraste .site-footer a {
+  color: #ffff00;
+}
+
+body.alto-contraste input,
+body.alto-contraste select,
+body.alto-contraste textarea,
+body.alto-contraste .tag,
+body.alto-contraste .accessibility-tools,
+body.alto-contraste .accessibility-tools button,
+body.alto-contraste .button-secondary {
+  border-color: #ffff00;
+  color: #fff;
+}
+
+body.alto-contraste input::placeholder,
+body.alto-contraste textarea::placeholder {
+  color: #e6e6e6;
+}
+
+body.alto-contraste .button-primary,
+body.alto-contraste .button-light,
+body.alto-contraste .button-secondary:hover,
+body.alto-contraste .accessibility-tools button:hover,
+body.alto-contraste .accessibility-tools button[aria-pressed="true"] {
+  background: #ffff00;
+  color: #000;
+  border-color: #ffff00;
+}
+
+body.alto-contraste .hero-image-pane {
+  background: #000;
+  border: 2px solid #fff;
+}
+
+body.alto-contraste .hero-note {
+  background: #000;
+  border-color: #ffff00;
+}
+
+body.alto-contraste .modal-card,
+body.alto-contraste .user-profile-summary-card,
+body.alto-contraste dialog {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #ffff00 !important;
+}
+body.alto-contraste dialog::backdrop {
+  background: rgba(0, 0, 0, 0.92) !important;
+}
+body.alto-contraste dialog input,
+body.alto-contraste dialog select {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #ffff00 !important;
+}
+body.alto-contraste dialog input:disabled {
+  background: #1a1a1a !important;
+  color: #888888 !important;
+  border-color: #555555 !important;
+}
+body.alto-contraste .nav-avatar-btn,
+body.alto-contraste .avatar-large-circle {
+  border-color: #fff;
+  background: #000;
+  color: #fff;
+}
+body.alto-contraste .nav-avatar-badge {
+  background: #000;
+  color: #ffff00;
+  border-color: #ffff00;
+}
+
+@media (max-width: 768px) {
+  .accessibility-tools {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+}
+

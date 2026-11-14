@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Container Base -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+
+  <!-- Camera Body Contour -->
+  <path d="M 23 15 L 27 15 L 29 19 L 47 19 C 51.4 19 55 22.6 55 27 L 55 45 C 55 49.4 51.4 53 47 53 L 17 53 C 12.6 53 9 49.4 9 45 L 9 27 C 9 22.6 12.6 19 17 19 L 21 19 Z" fill="#18181b" stroke="#52525b" stroke-width="1.8"/>
+
+  <!-- Viewfinder Red Dot -->
+  <circle cx="16" cy="25" r="2.2" fill="#ef4444"/>
+
+  <!-- Lens Outer Ring -->
+  <circle cx="35" cy="36" r="14" fill="#09090b" stroke="#ffffff" stroke-width="2.5"/>
+
+  <!-- Lens Iris Accent Ring -->
+  <circle cx="35" cy="36" r="10.5" fill="#0c1929" stroke="url(#lens)" stroke-width="2"/>
+
+  <!-- Stylized FOTECTA "F" in Center -->
+  <path d="M 31.5 29 L 39 29 L 39 31.8 L 34.5 31.8 L 34.5 34.2 L 38 34.2 L 38 36.8 L 34.5 36.8 L 34.5 43 L 31.5 43 Z" fill="#ffffff"/>
+
+  <!-- Lens Reflection Dot -->
+  <circle cx="41.5" cy="30.5" r="1.5" fill="#38bdf8"/>
+</svg>

@@ -1,205 +1,435 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FOTECTA</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/accessibility.css" />
-  </head>
-  <body>
-    <header>
-      <div class="brand-wrap">
-        <span class="brand-avatar"></span>
-        <div class="brand">FOTECTA</div>
-      </div>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/login">Login</a>
-        <a href="/cadastro">Cadastre-se</a>
-        <a href="/sobrenos">Sobre nós</a>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FOTECTA conecta clientes a fotógrafos e seus portfólios.">
+  <title>FOTECTA | Fotógrafos e portfólios</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/acessibilidade.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="FOTECTA, página inicial">FOTECTA</a>
+      <nav aria-label="Navegação principal">
+        <a href="#busca">Encontrar fotógrafo</a>
+        <a href="#sobrenos" id="nav-link-sobrenos"> Sobre nós</a>
+        <span id="nav-auth" aria-live="polite"></span>
+        <div class="accessibility-tools" role="group" aria-label="Opções de acessibilidade">
+          <button id="btn-alto-contraste" type="button" aria-pressed="false" title="Alternar alto contraste">Contraste</button>
+          <button id="btn-aumentar-texto" type="button" title="Aumentar tamanho do texto">A+</button>
+          <button id="btn-diminuir-texto" type="button" title="Diminuir tamanho do texto">A-</button>
+          <button id="btn-restaurar-texto" type="button" title="Restaurar tamanho do texto">A</button>
+        </div>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <main class="page-shell">
-      <section class="hero">
-        <div class="hero-copy">
-          <h1>Conecte clientes e fotógrafos, com acolhimento e simplicidade.</h1>
-          <p>Plataforma para agendamentos rápidos, perfil claro e uma experiência sem complicação — do primeiro contato ao dia da sessão.</p>
-          <div class="hero-actions">
-            <a href="/cadastro" class="btn btn-primary">Começar agora</a>
-          </div>
+  <main id="conteudo-principal" tabindex="-1">
+    <section id="inicio" class="hero" aria-labelledby="titulo-principal">
+      <div class="hero-copy">
+        <p class="eyebrow">Fotografia com clareza</p>
+        <h1 id="titulo-principal">Encontre o olhar<br>certo para o seu<br>momento.</h1>
+        <p>Explore portfólios, compare estilos e converse diretamente com fotógrafos por especialidade e cidade.</p>
+        <a class="button button-primary" href="#busca">Explorar portfólios</a>
+      </div>
+      <div class="hero-image-pane" aria-label="Manifesto visual da FOTECTA">
+        <span class="hero-mark" aria-hidden="true">FOTECTA</span>
+        <div class="hero-note">
+          <strong>Sem leilão reverso.</strong>
+          <span>Perfis claros, portfólios reais e escolhas feitas com calma.</span>
         </div>
+      </div>
+    </section>
 
-        <div class="hero-image">
-          <span class="avatar-large"></span>
-      </section>
-
-      <section class="content-section">
-        <h2 class="section-title">Em poucos passos</h2>
-        <p class="section-subtitle">Fluxo direto para quem está começando e para quem já tem experiência.</p>
-        <div class="feature-grid">
-          <div class="feature-card box-card">
-            <div class="icon-circle"><i>✦</i></div>
-            <h3>Escolha</h3>
-            <p>Estilo, cidade e disponibilidade.</p>
-            <span class="pill">Filtros simples</span>
-          </div>
-          <div class="feature-card box-card">
-            <div class="icon-circle"><i>💬</i></div>
-            <h3>Converse</h3>
-            <p>Envie detalhes sem burocracia.</p>
-            <span class="pill">Mensagens objetivas</span>
-          </div>
-          <div class="feature-card box-card">
-            <div class="icon-circle"><i>✓</i></div>
-            <h3>Agende</h3>
-            <p>Confirme datas e prazos.</p>
-            <span class="pill">Status do pedido</span>
-          </div>
+    <section id="dashboard-logado" class="section dashboard-section" aria-labelledby="titulo-dashboard" hidden>
+      <div class="section-heading">
+        <p class="eyebrow">Área pessoal</p>
+        <h2 id="titulo-dashboard">Bem-vindo de volta, <span id="dashboard-nome"></span>.</h2>
+        <p>Acesse seus favoritos, encontre profissionais e gerencie suas solicitações.</p>
+      </div>
+      <div class="user-profile-summary-card">
+        <div id="dash-avatar-circle" class="avatar-large-circle"></div>
+        <div class="user-profile-info">
+          <strong id="dash-user-nome"></strong>
+          <span id="dash-user-email"></span>
+          <span id="dash-user-tipo" class="badge"></span>
         </div>
-      </section>
+        <div class="user-profile-actions">
+          <button id="dash-btn-ajustar-foto" class="button button-secondary" type="button">Ajustar foto</button>
+          <button id="dash-btn-remover-foto" class="button button-secondary" type="button">Remover foto</button>
+        </div>
+      </div>
+      <div class="quick-actions">
+        <a class="quick-action" href="#busca"><strong>Encontrar fotógrafo</strong><span>Explore portfólios por estilo e cidade no mapa.</span></a>
+        <a class="quick-action" href="#cliente-perfil-bloco"><strong>Meus dados pessoais</strong><span>Atualize seu nome, localização e preferências.</span></a>
+        <a class="quick-action" href="#inicio"><strong>Voltar ao início</strong><span>Retome sua navegação na plataforma.</span></a>
+      </div>
 
-      <section class="content-section">
-        <div class="section-header">
+      <div id="cliente-perfil-bloco" class="dashboard-block" style="margin-top: 2rem;">
+        <h3>Meus dados pessoais</h3>
+        <form id="perfil-cliente-form" class="dashboard-form" style="max-width: 680px;" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="cliente-nome">Nome completo</label>
+              <input id="cliente-nome" name="nome" required>
+            </div>
+            <div class="field">
+              <label for="cliente-cidade">Cidade / Estado</label>
+              <input id="cliente-cidade" name="localizacao" placeholder="Ex.: São Paulo, SP">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="cliente-telefone">Telefone / WhatsApp</label>
+              <input id="cliente-telefone" name="telefone" type="tel" placeholder="(11) 98765-4321" maxlength="15">
+            </div>
+            <div class="field">
+              <label for="cliente-cpf">CPF</label>
+              <input id="cliente-cpf" name="cpf" placeholder="000.000.000-00" maxlength="14">
+            </div>
+          </div>
+          <div class="field">
+            <label for="cliente-interesses">Estilos e interesses fotográficos</label>
+            <input id="cliente-interesses" name="interesses" placeholder="Ex.: Casamentos, Família, Retratos, Eventos">
+          </div>
+          <div class="field">
+            <label for="cliente-bio">Sobre você / Observações</label>
+            <textarea id="cliente-bio" name="bio" rows="3" placeholder="Informações que ajudam o fotógrafo a entender seu estilo..."></textarea>
+          </div>
+          <button class="button button-primary" type="submit">Salvar dados pessoais</button>
+          <p id="perfil-cliente-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div id="cliente-projetos-bloco" class="dashboard-block" style="margin-top: 2.5rem;" hidden>
+        <h3>Meus orçamentos e conversas</h3>
+        <div id="cliente-projetos-lista" class="project-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="dashboard-fotografo" class="section photographer-section" aria-labelledby="titulo-painel-fotografo" hidden>
+      <div class="section-heading">
+        <p class="eyebrow">Painel profissional</p>
+        <h2 id="titulo-painel-fotografo">Seu trabalho, sempre em movimento.</h2>
+        <p>Atualize seu perfil, organize seu portfólio, responda avaliações e acompanhe solicitações de clientes.</p>
+      </div>
+      <div class="photographer-grid">
+        <form id="perfil-fotografo-form" class="dashboard-form">
+          <h3>Perfil e preços</h3>
+          <div class="field">
+            <label for="fotografo-foto">Foto de perfil</label>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 0.5rem;">
+              <div id="fotografo-avatar-preview" class="avatar-large-circle" style="width: 3.2rem; height: 3.2rem; font-size: 1.1rem; flex-shrink: 0;"></div>
+              <button id="fotografo-btn-remover-foto" class="button button-secondary" type="button" style="font-size: 0.8rem; padding: 0.35rem 0.75rem; min-height: 2.2rem;">Remover foto atual</button>
+            </div>
+            <input id="fotografo-foto" name="fotoPerfil" type="file" accept="image/*">
+            <small>Imagem JPG, PNG ou WebP de até 8 MB.</small>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="fotografo-telefone">Telefone / WhatsApp</label>
+              <input id="fotografo-telefone" name="telefone" type="tel" placeholder="(11) 98765-4321" maxlength="15">
+            </div>
+            <div class="field">
+              <label for="fotografo-cpf">CPF</label>
+              <input id="fotografo-cpf" name="cpf" placeholder="000.000.000-00" maxlength="14">
+            </div>
+          </div>
+          <div class="field"><label for="fotografo-bio">Biografia</label><textarea id="fotografo-bio" name="biografia" rows="4" maxlength="1000"></textarea></div>
+          <div class="form-row">
+            <div class="field"><label for="fotografo-localizacao">Área de atendimento</label><input id="fotografo-localizacao" name="localizacao" placeholder="Ex.: São Paulo, SP" autocomplete="address-level2"></div>
+            <div class="field"><label for="fotografo-preco">Preço médio e pacotes</label><input id="fotografo-preco" name="preco" placeholder="Ex.: R$ 800 - R$ 1.500"></div>
+          </div>
+          <div class="field"><label for="fotografo-instagram">Instagram</label><input id="fotografo-instagram" name="instagram" placeholder="@seu_usuario"></div>
+
+          <div class="field">
+            <label id="label-formas-pagamento">Formas de pagamento aceitas</label>
+            <div id="fotografo-metodos-pagamento" class="checkbox-group" role="group" aria-labelledby="label-formas-pagamento" style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.35rem;">
+              <label class="checkbox-pill"><input type="checkbox" name="metodosPagamento" value="Pix"> <span>Pix</span></label>
+              <label class="checkbox-pill"><input type="checkbox" name="metodosPagamento" value="Cartão de Crédito"> <span>Cartão de Crédito</span></label>
+              <label class="checkbox-pill"><input type="checkbox" name="metodosPagamento" value="Cartão de Débito"> <span>Cartão de Débito</span></label>
+              <label class="checkbox-pill"><input type="checkbox" name="metodosPagamento" value="Dinheiro"> <span>Dinheiro</span></label>
+              <label class="checkbox-pill"><input type="checkbox" name="metodosPagamento" value="Boleto Bancário"> <span>Boleto Bancário</span></label>
+            </div>
+          </div>
+
+          <button class="button button-primary" type="submit">Salvar perfil</button>
+          <p id="perfil-fotografo-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+        <form id="portfolio-form" class="dashboard-form">
+          <h3>Adicionar fotografia</h3>
+          <div class="field"><label for="portfolio-foto">Arquivo de imagem</label><input id="portfolio-foto" name="foto" type="file" accept="image/*" required></div>
+          <div class="field"><label for="portfolio-nome">Coleção</label><input id="portfolio-nome" name="nomePortfolio" required placeholder="Ex.: Casamentos 2026"></div>
+          <div class="field"><label for="portfolio-categoria">Categoria</label><select id="portfolio-categoria" name="categoria" required><option>Casamentos</option><option>Ensaios</option><option>Eventos</option><option>Publicidade</option><option>Outros</option></select></div>
+          <div class="field"><label for="portfolio-legenda">Legenda para acessibilidade</label><input id="portfolio-legenda" name="legenda" required placeholder="Descreva a fotografia"></div>
+          <button class="button button-primary" type="submit">Enviar para o portfólio</button>
+          <p id="portfolio-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <div class="dashboard-block"><h3>Minha galeria</h3><div id="portfolio-lista" class="portfolio-manage-grid"></div></div>
+      <div class="dashboard-block"><h3>Solicitações de clientes e Chat</h3><div id="projetos-lista" class="project-list" aria-live="polite"></div></div>
+      <div class="dashboard-block"><h3>Avaliações e Recomendações recebidas</h3><div id="avaliacoes-recebidas-lista" class="reviews-list" aria-live="polite"></div></div>
+    </section>
+
+    <section id="busca" class="section" aria-labelledby="titulo-busca">
+      <div class="section-heading">
+        <p class="eyebrow">Vitrine e Geolocalização</p>
+        <h2 id="titulo-busca">Busque por estilo ou localização</h2>
+      </div>
+      <form id="filtro-form" class="filters" role="search">
+        <div class="field">
+          <label for="busca-input">Nome do fotógrafo</label>
+          <input id="busca-input" name="q" type="search" placeholder="Ex.: Ana Oliveira" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="especialidade">Especialidade</label>
+          <select id="especialidade" name="especialidade">
+            <option value="">Todas as especialidades</option>
+            <option>Casamentos</option><option>Eventos</option><option>Ensaios</option><option>Publicidade</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cidade">Cidade</label>
+          <input id="cidade" name="cidade" type="text" placeholder="Ex.: São Paulo, Guarulhos, Campinas" autocomplete="address-level2">
+        </div>
+        <button class="button button-primary" type="submit">Buscar fotógrafos</button>
+      </form>
+      <div class="search-toolbar" style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button id="btn-gps" class="button button-secondary" type="button" style="font-size: 0.82rem; min-height: 2.4rem; padding: 0.4rem 1rem;" title="Encontrar fotógrafos mais próximos usando sua localização atual via GPS">📍 Perto de mim (GPS)</button>
+          <button id="btn-toggle-mapa" class="button button-secondary" type="button" style="font-size: 0.82rem; min-height: 2.4rem; padding: 0.4rem 1rem;">🗺️ Alternar mapa interativo</button>
+        </div>
+        <p id="busca-status" class="status" role="status" aria-live="polite" style="margin: 0;"></p>
+      </div>
+      <div id="mapa-container" style="display: none; height: 380px; width: 100%; border-radius: 4px; border: 1px solid var(--border-color); margin-top: 1.25rem;" aria-label="Mapa de fotógrafos por região"></div>
+      <div id="lista-profissionais" class="gallery" aria-live="polite"></div>
+    </section>
+
+    <!-- Chat Interno / Mensageria Integrada -->
+    <section id="chat-secao" class="section chat-section" aria-labelledby="titulo-chat" hidden>
+      <div class="section-heading">
+        <p class="eyebrow">Comunicação direta</p>
+        <h2 id="titulo-chat">Chat integrado</h2>
+        <p id="chat-subtitulo">Converse diretamente sobre valores, datas e detalhes do seu ensaio.</p>
+      </div>
+      <div class="chat-card">
+        <div class="chat-header-bar">
           <div>
-            <h2 class="section-title">Para clientes</h2>
-            <p class="section-subtitle">Encontre o fotógrafo certo com clareza, rapidez e segurança.</p>
+            <strong id="chat-titulo-projeto">Projeto</strong><br>
+            <small id="chat-participantes" style="color: var(--text-muted);"></small>
           </div>
-          <a href="/cadastro" class="btn btn-link">Ver exemplos de sessões</a>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button id="btn-denunciar-chat" class="button button-secondary" type="button" style="padding: 0.35rem 0.85rem; min-height: 2.2rem; font-size: 0.8rem; color: #dc2626; border-color: #fca5a5;" title="Denunciar conduta inadequada para a moderação do FOTECTA">🚩 Denunciar conversa</button>
+            <button id="btn-fechar-chat" class="button button-secondary" type="button" style="padding: 0.35rem 0.85rem; min-height: 2.2rem; font-size: 0.8rem;">Fechar chat</button>
+          </div>
         </div>
+        <div id="chat-mensagens" class="chat-history" aria-live="polite"></div>
+        <form id="chat-form" class="chat-composer">
+          <input type="hidden" id="chat-projeto-id" name="projetoId">
+          <input id="chat-texto" name="texto" type="text" placeholder="Digite sua mensagem aqui..." required autocomplete="off">
+          <button class="button button-primary" type="submit">Enviar mensagem</button>
+        </form>
+      </div>
+    </section>
 
-        <div class="dual-grid">
-          <div class="profile-card box-card">
-            <div class="profile-row">
-              <div class="ghost-square"></div>
-              <div>
-                <h3>João da Silva</h3>
-                <p>Fotografia de Casamentos</p>
-              </div>
+    <section id="orcamento" class="section quote-section" aria-labelledby="titulo-orcamento" hidden>
+      <div class="section-heading">
+        <p class="eyebrow">Contato direto</p>
+        <h2 id="titulo-orcamento">Solicitar orçamento</h2>
+        <p>Descreva sua sessão. O profissional receberá o pedido para acompanhar no painel.</p>
+      </div>
+      <form id="orcamento-form" class="quote-form" novalidate>
+        <input id="orcamento-profissional" name="profissionalId" type="hidden">
+        <p id="orcamento-profissional-nome" class="status" aria-live="polite"></p>
+        <div class="field"><label for="orcamento-titulo">Título do pedido</label><input id="orcamento-titulo" name="titulo" required placeholder="Ex.: Ensaio de família"></div>
+        <div class="field"><label for="orcamento-descricao">Descrição da sessão</label><textarea id="orcamento-descricao" name="descricao" rows="4" required placeholder="Conte data, estilo e necessidades da sessão."></textarea></div>
+        <div class="form-row"><div class="field"><label for="orcamento-cidade">Cidade</label><input id="orcamento-cidade" name="cidade" required></div><div class="field"><label for="orcamento-estado">Estado</label><input id="orcamento-estado" name="estado" maxlength="2" required></div></div>
+        <div class="form-row">
+          <div class="field"><label for="orcamento-data">Data desejada</label><input id="orcamento-data" name="dataEvento" type="datetime-local"></div>
+          <div class="field"><label for="orcamento-valor">Orçamento previsto / Proposta (R$)</label><input id="orcamento-valor" name="valor" placeholder="Ex.: R$ 1.200 ou A combinar"></div>
+        </div>
+        <div class="field">
+          <label for="orcamento-metodo-pagamento">Forma de pagamento sugerida</label>
+          <select id="orcamento-metodo-pagamento" name="metodoPagamento">
+            <option value="Pix">Pix</option>
+            <option value="Cartão de Crédito">Cartão de Crédito</option>
+            <option value="Cartão de Débito">Cartão de Débito</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Boleto Bancário">Boleto Bancário</option>
+            <option value="A combinar" selected>A combinar</option>
+          </select>
+        </div>
+        <button class="button button-primary" type="submit">Enviar solicitação</button>
+        <p id="orcamento-status" class="status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="login" class="section auth-section" aria-labelledby="titulo-login">
+      <div class="section-heading">
+        <p class="eyebrow">Área reservada</p>
+        <h2 id="titulo-login">Entre na sua conta</h2>
+        <p>Acesse seus favoritos, conversas e informações de perfil.</p>
+      </div>
+      <div class="auth-grid">
+        <form id="login-form" class="auth-form" novalidate>
+          <div id="login-erros" class="error-message" role="alert" aria-live="assertive" tabindex="-1" hidden></div>
+          <div class="field"><label for="login-email">E-mail</label><input id="login-email" name="email" type="email" required autocomplete="email" inputmode="email"></div>
+          <div class="field"><label for="login-senha">Senha</label><input id="login-senha" name="senha" type="password" required autocomplete="current-password"></div>
+          <button class="button button-primary" type="submit">Entrar</button>
+          <p id="login-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+        <form id="recuperacao-form" class="auth-form" novalidate>
+          <h3>Esqueceu sua senha?</h3>
+          <p>Informe seu e-mail para registrar uma solicitação de recuperação.</p>
+          <div class="field"><label for="recuperacao-email">E-mail de recuperação</label><input id="recuperacao-email" name="email" type="email" required autocomplete="email" inputmode="email"></div>
+          <button class="button button-secondary" type="submit">Enviar instruções</button>
+          <p id="recuperacao-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="cadastro" class="section section-dark" aria-labelledby="titulo-cadastro">
+      <div class="section-heading">
+        <p class="eyebrow">Primeiro passo</p>
+        <h2 id="titulo-cadastro">Faça parte da FOTECTA</h2>
+        <p>Crie uma conta para contratar um fotógrafo ou apresentar seu trabalho.</p>
+      </div>
+      <form id="cadastro-form" class="signup-form" novalidate>
+        <div id="cadastro-erros" class="error-message" role="alert" aria-live="assertive" tabindex="-1" hidden></div>
+        <div class="signup-col">
+          <div class="field">
+            <label for="cadastro-nome">Nome completo</label>
+            <input id="cadastro-nome" name="nome" required autocomplete="name" placeholder="Ex.: Ana Silva">
+          </div>
+          <div class="field">
+            <label for="cadastro-cpf">CPF (opcional)</label>
+            <input id="cadastro-cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="cadastro-senha">Senha</label>
+            <input id="cadastro-senha" name="senha" type="password" minlength="8" required autocomplete="new-password" aria-describedby="senha-feedback">
+            <small id="senha-feedback" class="field-feedback" aria-live="polite">Mínimo de 8 caracteres.</small>
+          </div>
+          <button class="button button-light" type="submit">Criar cadastro</button>
+          <p id="cadastro-status" class="status" role="status" aria-live="polite"></p>
+        </div>
+        <div class="signup-col">
+          <div class="field">
+            <label for="cadastro-email">E-mail</label>
+            <input id="cadastro-email" name="email" type="email" required autocomplete="email" inputmode="email" aria-describedby="email-feedback">
+            <small id="email-feedback" class="field-feedback" aria-live="polite"></small>
+          </div>
+          <div class="field">
+            <label for="cadastro-telefone">Telefone / WhatsApp</label>
+            <input id="cadastro-telefone" name="telefone" type="tel" placeholder="(11) 98765-4321" maxlength="15" autocomplete="tel">
+          </div>
+          <div class="field">
+            <label for="cadastro-cidade">Cidade / UF</label>
+            <input id="cadastro-cidade" name="cidade" placeholder="Ex.: São Paulo, SP" autocomplete="address-level2">
+          </div>
+          <div class="field">
+            <label for="cadastro-tipo">Quero me cadastrar como</label>
+            <select id="cadastro-tipo" name="tipo" required>
+              <option value="cliente">Cliente</option>
+              <option value="fotografo">Fotógrafo</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section id="sobrenos" class="section about-section" aria-labelledby="titulo-sobrenos">
+      <div class="section-heading">
+        <p class="eyebrow">Projeto Integrador II - UNIVESP</p>
+        <h2 id="titulo-sobrenos">Sobre o FOTECTA</h2>
+        <p>Conheça nossa missão, o time acadêmico de desenvolvimento e tire suas dúvidas sobre a plataforma.</p>
+      </div>
+
+      <div class="story-card about-card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 2rem; margin-bottom: 2rem;">
+        <span class="pill" style="display: inline-block; background: #e0f2fe; color: #0369a1; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.75rem;">Nossa Missão & Valores</span>
+        <div id="textoSobreNos" class="about-text" style="font-size: 1.05rem; line-height: 1.7; color: var(--text-color);">
+          <p>Este projeto foi desenvolvido em 2026 pelo <strong>Grupo 9</strong> da turma de Tecnologia da Informação da <strong>UNIVESP (Universidade Virtual do Estado de São Paulo)</strong> para a disciplina de Projeto Integrador II.</p>
+          <p><strong>Integrantes do grupo:</strong> Gabriela Sampaio da Silva, Gustavo Santos Lima de Oliveira, Ivani Santos André, Jacqueline Santana Nascimento Benevides, Leonardo Quaresma da Silva, Maria José de Sousa, Otávio Augusto Costa e Victor Gabriel Santos Magalhães.</p>
+          <p>O objetivo central da FOTECTA é conectar clientes a fotógrafos autônomos de maneira justa, ética e transparente, promovendo visibilidade digital, segurança nas negociações, avaliações reais de clientes verificados e acessibilidade universal (WCAG 2.1 / e-MAG).</p>
+        </div>
+      </div>
+
+      <div class="story-card faq-card" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 2rem;">
+        <h3 style="margin-top: 0; font-size: 1.4rem;">Dúvidas Frequentes (FAQ)</h3>
+        <div class="faq-list" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.25rem;">
+          <details class="faq-item" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 1rem;">
+            <summary style="font-weight: 600; cursor: pointer;">Como funciona a busca por geolocalização e proximidade?</summary>
+            <div class="faq-answer" style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+              Ao clicar no botão <strong>"📍 Perto de mim (GPS)"</strong> ou ativar o mapa interativo, a plataforma utiliza a API de geolocalização do navegador e calcula com precisão a distância geodésica em quilômetros até cada fotógrafo cadastrado através da <em>fórmula de Haversine</em>.
             </div>
-            <div class="profile-meta">Email: joaodasilva@email.com | Contato: (11) 99999-9999</div>
-            <div class="pill-row">
-              <span class="pill">Portfólio</span>
-              <span class="pill">Casamentos</span>
-              <span class="pill">Eventos</span>
+          </details>
+          <details class="faq-item" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 1rem;">
+            <summary style="font-weight: 600; cursor: pointer;">Como solicito um orçamento e combino o pagamento?</summary>
+            <div class="faq-answer" style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+              Você pode clicar em <strong>"Solicitar orçamento"</strong> no perfil do fotógrafo, informar a data, detalhes do ensaio e propor uma forma de pagamento (Pix, Cartão, Dinheiro). O profissional receberá a solicitação diretamente no painel dele, onde ambos poderão abrir o <strong>Chat Integrado</strong> para combinar detalhes.
             </div>
-          </div>
-
-          <div class="profile-card box-card">
-            <div class="profile-row">
-              <div class="ghost-square"></div>
-              <div>
-                <h3>Maria Oliveira</h3>
-                <p>Fotografia Retratos</p>
-              </div>
+          </details>
+          <details class="faq-item" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 1rem;">
+            <summary style="font-weight: 600; cursor: pointer;">Como funciona o sistema de avaliações verificadas?</summary>
+            <div class="faq-answer" style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+              Apenas clientes cadastrados e autenticados podem publicar avaliações nos perfis dos fotógrafos. O sistema bloqueia autoavaliações fraudulentas e permite que o profissional responda diretamente às avaliações recebidas pelo seu painel de controle.
             </div>
-            <div class="profile-meta">Email: mariaoliveira@email.com | Contato: (21) 98888-8888</div>
-            <div class="pill-row">
-              <span class="pill">Portfólio</span>
-              <span class="pill">Retratos</span>
-              <span class="pill">Eventos</span>
-            </div>
-          </div>
+          </details>
         </div>
-      </section>
+      </div>
+    </section>
+  </main>
 
-      <section class="content-section">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Para fotógrafos</h2>
-            <p class="section-subtitle">Mais oportunidades com menos esforço — do perfil ao agendamento.</p>
-          </div>
-          <a href="/cadastro" class="btn btn-primary btn-small">Quero receber propostas</a>
+  <footer class="site-footer">
+    <span>FOTECTA &copy; 2026 - Conectando profissionais e clientes</span>
+    <div style="display: flex; gap: 1.25rem;">
+      <a href="#inicio">Início</a>
+      <a href="#busca">Encontrar fotógrafo</a>
+      <a href="#sobrenos">ℹ️ Sobre nós & FAQ</a>
+    </div>
+  </footer>
+  <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Modal Gerenciador de Foto de Perfil (Ajustar e Remover) -->
+  <div id="modal-foto-perfil" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-foto-titulo">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-foto-titulo">Foto de perfil</h3>
+        <button id="modal-foto-fechar" class="modal-close-btn" type="button" aria-label="Fechar janela de foto">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-large-preview-wrap">
+          <div id="modal-avatar-preview" class="avatar-large-circle" aria-label="Visualização da foto de perfil"></div>
         </div>
+        <p id="modal-foto-usuario" class="modal-user-name"></p>
+        <p id="modal-foto-tipo" class="modal-user-role"></p>
 
-        <div class="dual-grid">
-          <div class="mini-card box-card">
-            <h3>Cliente A</h3>
-            <p>Conectou-se com João da Silva</p>
-            <span class="pill">Cliente satisfeito</span>
-          </div>
-          <div class="mini-card box-card">
-            <h3>Cliente B</h3>
-            <p>Conectou-se com Maria Oliveira</p>
-            <span class="pill">Atendimento aprovado</span>
-          </div>
+        <input id="modal-foto-input" type="file" accept="image/jpeg,image/png,image/webp" style="display: none;">
+
+        <div class="modal-actions">
+          <button id="modal-btn-escolher" class="button button-primary" type="button">
+            📷 Escolher / Ajustar foto
+          </button>
+          <button id="modal-btn-remover" class="button button-secondary" type="button">
+            🗑️ Remover foto atual
+          </button>
         </div>
-      </section>
+        <p id="modal-foto-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
 
-      <section class="content-section result-panel box-card">
-        <div class="section-header stats-header">
-          <div>
-            <h2 class="section-title">Resultados (visão geral) DEMO</h2>
-            <p class="section-subtitle">Indicadores pensados para dar confiança em poucos segundos.</p>
-          </div>
-          <a href="/cadastro" class="btn btn-primary btn-small">Ver como funciona</a>
-        </div>
-
-        <div class="chart">
-          <span class="bar chart-42"></span>
-          <span class="bar chart-58"></span>
-          <span class="bar chart-82 dark"></span>
-          <span class="bar chart-60"></span>
-          <span class="bar chart-72"></span>
-          <span class="bar chart-88"></span>
-          <span class="bar chart-74"></span>
-        </div>
-
-        <div class="chart-labels">
-          <span>Semanas</span>
-          <span>Quantidade</span>
-        </div>
-
-      
-      </section>
-
-      <section class="content-section">
-        <h2 class="section-title center-title">Depoimentos DEMO</h2>
-        <p class="section-subtitle center-title">Gente real, experiências claras e respeitosas.</p>
-        <div class="testimonial-grid">
-          <div class="testimonial box-card">
-            <div class="user-inline">
-              <span class="avatar-mini"></span>
-              <strong>Carlos M.</strong>
-            </div>
-            <p>Como fotógrafo, gostei do jeito que o cliente descreve a demanda. Menos troca e mais alinhamento.</p>
-          </div>
-          <div class="testimonial box-card">
-            <div class="user-inline">
-              <span class="avatar-mini"></span>
-              <strong>Ana Paula S.</strong>
-            </div>
-            <p>O site é bem direto. Mesmo sem experiência, consegui contratar rápido e com segurança.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="content-section bottom-grid">
-        <div class="soft-panel box-card">
-          <p>Monocromia elegante, humana e acessível. A experiência é desenhada para ser clara para todas as idades.</p>
-          <div class="dots-row">
-            <span class="pill dot-pill"></span>
-            <span class="pill dot-pill"></span>
-            <span class="pill dot-pill"></span>
-            <span class="pill dot-pill"></span>
-          </div>
-        </div>
-
-        <div class="soft-panel box-card preview-panel">
-          <div class="preview-wrap">
-            <span class="avatar-large"></span>
-          </div>
-          <p>Atendimento por cidade: encontre fotógrafos próximos e agende com mais facilidade.</p>
-        </div>
-      </section>
-
-      <h2 class="section-title">Fotógrafos em destaque</h2>
-      <div id="message" class="message"></div>
-      <div id="users-list" class="grid"></div>
-    </main>
-
-    <script src="/app.js"></script>
-    <script src="/accessibility.js"></script>
-  </body>
+  <script src="/app.js" defer></script>
+  <script src="/acessibilidade.js" defer></script>
+</body>
 </html>
