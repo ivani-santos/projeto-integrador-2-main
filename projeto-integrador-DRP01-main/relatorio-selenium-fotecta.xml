@@ -1,5 +1,5 @@
-<testsuite name="Mocha Tests" tests="3" failures="0" errors="0" skipped="0" timestamp="Sat, 14 Nov 2026 02:09:37 GMT" time="6.749">
-<testcase classname="FOTECTA no navegador" name="abre a p&#xE1;gina inicial e mostra a apresenta&#xE7;&#xE3;o do FOTECTA" file="C:\Users\iviis\Downloads\projeto-integrador-DRP01-main (2)\projeto-integrador-DRP01-main\browser\chromeSpecificCaps.spec.js" time="0.778"/>
-<testcase classname="FOTECTA no navegador" name="filtra fot&#xF3;grafos por nome, especialidade e cidade na p&#xE1;gina" file="C:\Users\iviis\Downloads\projeto-integrador-DRP01-main (2)\projeto-integrador-DRP01-main\browser\chromeSpecificCaps.spec.js" time="1.312"/>
-<testcase classname="FOTECTA no navegador" name="autentica um cliente de demonstra&#xE7;&#xE3;o e permite sair" file="C:\Users\iviis\Downloads\projeto-integrador-DRP01-main (2)\projeto-integrador-DRP01-main\browser\chromeSpecificCaps.spec.js" time="1.531"/>
+<testsuite name="Mocha Tests" tests="3" failures="0" errors="0" skipped="0" timestamp="Sat, 14 Nov 2026 02:56:32 GMT" time="9.076">
+<testcase classname="FOTECTA no navegador" name="abre a pagina inicial e mostra a apresentacao do FOTECTA" file="C:\Users\iviis\Downloads\projeto-integrador-DRP01-main (2)\projeto-integrador-DRP01-main\browser\chromeSpecificCaps.spec.js" time="1.633"/>
+<testcase classname="FOTECTA no navegador" name="filtra fotografos por nome, especialidade e cidade na pagina" file="C:\Users\iviis\Downloads\projeto-integrador-DRP01-main (2)\projeto-integrador-DRP01-main\browser\chromeSpecificCaps.spec.js" time="1.112"/>
+<testcase classname="FOTECTA no navegador" name="autentica um cliente de demonstracao e permite sair" file="C:\Users\iviis\Downloads\projeto-integrador-DRP01-main (2)\projeto-integrador-DRP01-main\browser\chromeSpecificCaps.spec.js" time="1.428"/>
 </testsuite>

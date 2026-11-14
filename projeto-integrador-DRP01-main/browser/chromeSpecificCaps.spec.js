@@ -32,7 +32,7 @@ describe('FOTECTA no navegador', function () {
     }
   });
 
-  it('abre a página inicial e mostra a apresentação do FOTECTA', async function () {
+  it('abre a pagina inicial e mostra a apresentacao do FOTECTA', async function () {
     await driver.get(appUrl);
 
     await driver.wait(until.elementLocated(By.id('titulo-principal')), waitTimeout);
@@ -40,7 +40,7 @@ describe('FOTECTA no navegador', function () {
     assert.match(await driver.findElement(By.id('titulo-principal')).getText(), /Encontre o olhar/i);
   });
 
-  it('filtra fotógrafos por nome, especialidade e cidade na página', async function () {
+  it('filtra fotografos por nome, especialidade e cidade na pagina', async function () {
     await driver.get(`${appUrl}/#busca`);
     await driver.wait(until.elementLocated(By.id('filtro-form')), waitTimeout);
     await driver.findElement(By.id('busca-input')).sendKeys('Carlos');
@@ -58,7 +58,7 @@ describe('FOTECTA no navegador', function () {
     assert.match(await cards[0].getText(), /Carlos Mendes/);
   });
 
-  it('autentica um cliente de demonstração e permite sair', async function () {
+  it('autentica um cliente de demonstracao e permite sair', async function () {
     await driver.get(`${appUrl}/#login`);
     await driver.wait(until.elementLocated(By.id('login-form')), waitTimeout);
     await driver.findElement(By.id('login-email')).sendKeys('cliente@fotecta.com');
