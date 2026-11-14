@@ -111,6 +111,11 @@ function persistDb() {
 // ----------------------------------------------------------------------------
 const isoNow = () => new Date().toISOString();
 const normalizeEmail = (e) => String(e || '').trim().toLowerCase();
+const normalizeSearchText = (value) => String(value || '')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .trim()
+  .toLowerCase();
 
 function parseJson(val, fallback) {
   if (val == null) return fallback;
@@ -553,8 +558,11 @@ app.get('/api/profissionais', async (req, res) => {
   const rows = await queryAll("SELECT * FROM users WHERE tipo = 'fotografo'");
   const userLat = req.query.lat ? Number(req.query.lat) : null;
   const userLng = req.query.lng ? Number(req.query.lng) : null;
+  const searchTerm = normalizeSearchText(req.query.q);
+  const specialtyFilter = normalizeSearchText(req.query.especialidade);
+  const cityFilter = normalizeSearchText(req.query.cidade);
 
-  const profissionais = await Promise.all(
+  let profissionais = await Promise.all(
     rows.map(async (row) => {
       const u = buildRow(row);
       const rating = await getRatingForUser(u.id);
@@ -570,6 +578,18 @@ app.get('/api/profissionais', async (req, res) => {
       };
     })
   );
+
+  if (searchTerm || specialtyFilter || cityFilter) {
+    profissionais = profissionais.filter((professional) => {
+      const fullName = normalizeSearchText(`${professional.nome} ${professional.sobrenome}`);
+      const city = normalizeSearchText(`${professional.cidade} ${professional.localizacao} ${professional.estado}`);
+      const specialties = Array.isArray(professional.especialidades) ? professional.especialidades : [];
+
+      return (!searchTerm || fullName.includes(searchTerm))
+        && (!specialtyFilter || specialties.some((specialty) => normalizeSearchText(specialty) === specialtyFilter))
+        && (!cityFilter || city.includes(cityFilter));
+    });
+  }
 
   if (userLat != null && userLng != null) {
     profissionais.sort((a, b) => (a.distancia_km ?? 9999) - (b.distancia_km ?? 9999));

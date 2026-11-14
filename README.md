@@ -105,16 +105,28 @@ npm test
 
 ### Testes de navegador com Selenium
 
-Os exemplos de capacidades do Chrome podem ser executados separadamente. É necessário ter o Google Chrome instalado:
+Os testes Selenium acessam o site em `http://localhost:3000`, verificam a página inicial e a busca de fotógrafos, e fazem login e logout com a conta de demonstração. Inicie o servidor em um terminal:
 
 ```bash
 cd ".\projeto-integrador-DRP01-main"
 npm install
+npm start
+```
+
+Em outro terminal, execute a suíte (Google Chrome instalado):
+
+```bash
+cd ".\projeto-integrador-DRP01-main"
 npm run test:browser
 ```
 
-O Selenium Manager localiza o driver do navegador. Os cenários usam a página de teste do Selenium e a extensão de exemplo mantida em `browser/resources/extensions/`. 
-O exemplo foi adaptado do [diretório de testes JavaScript do SeleniumHQ](https://github.com/SeleniumHQ/seleniumhq.github.io/tree/trunk/examples/javascript/test).
+Para gerar o relatório XML JUnit em `relatorio-selenium-fotecta.xml`:
+
+```bash
+npm run test:browser:report
+```
+
+O Selenium Manager localiza o driver do navegador. Para testar outra URL, defina `FOTECTA_URL` antes de executar os testes.
 
 ## Observação
 

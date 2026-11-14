@@ -36,6 +36,27 @@ test('GET /api/profissionais retorna lista com notas e geolocalizacao', async ()
   assert.ok('longitude' in prof);
 });
 
+test('GET /api/profissionais filtra por nome, especialidade e cidade', async () => {
+  await ready;
+
+  const byName = await request(app).get('/api/profissionais?q=carlos');
+  assert.equal(byName.status, 200);
+  assert.deepEqual(byName.body.profissionais.map((professional) => professional.nome), ['Carlos Mendes']);
+
+  const bySpecialtyAndCity = await request(app)
+    .get('/api/profissionais?especialidade=publicidade&cidade=campinas');
+  assert.equal(bySpecialtyAndCity.status, 200);
+  assert.deepEqual(bySpecialtyAndCity.body.profissionais.map((professional) => professional.nome), ['Carlos Mendes']);
+
+  const byUnaccentedCity = await request(app).get('/api/profissionais?cidade=sao%20paulo');
+  assert.equal(byUnaccentedCity.status, 200);
+  assert.ok(byUnaccentedCity.body.profissionais.length > 0);
+  assert.ok(byUnaccentedCity.body.profissionais.every((professional) => (
+    /sao paulo/i.test(`${professional.cidade} ${professional.localizacao} ${professional.estado}`
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
+  )));
+});
+
 test('GET /api/profissionais/:id retorna perfil com portfolio e avaliacoes', async () => {
   await ready;
   const res = await request(app).get('/api/profissionais/3');
@@ -277,4 +298,3 @@ test('POST /api/projetos/:id/denunciar registra denúncia e admin modera e edita
   assert.equal(editUserRes.status, 200);
   assert.equal(editUserRes.body.ok, true);
 });
-

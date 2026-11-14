@@ -1,43 +1,78 @@
 const assert = require('node:assert/strict');
-const path = require('node:path');
 const Chrome = require('selenium-webdriver/chrome');
-const { Browser, Builder } = require('selenium-webdriver');
+const { By, Browser, Builder, Select, until } = require('selenium-webdriver');
 
-const blankPage = 'https://www.selenium.dev/selenium/web/blank.html';
-const extensionPath = path.join(__dirname, 'resources', 'extensions', 'webextensions-selenium-example.crx');
+const appUrl = (process.env.FOTECTA_URL || 'http://localhost:3000').replace(/\/+$/, '');
+const waitTimeout = 15000;
 
-async function openBlankPage(options) {
-  const driver = await new Builder()
-    .forBrowser(Browser.CHROME)
-    .setChromeOptions(options)
-    .build();
-
-  try {
-    await driver.get(blankPage);
-    assert.equal(await driver.getCurrentUrl(), blankPage);
-  } finally {
-    await driver.quit();
-  }
+async function clickVisible(webDriver, selector) {
+  const element = await webDriver.findElement(By.css(selector));
+  await webDriver.executeScript(
+    'arguments[0].scrollIntoView({ block: "center", behavior: "instant" });',
+    element,
+  );
+  await webDriver.wait(until.elementIsVisible(element), waitTimeout);
+  await element.click();
 }
 
-describe('Chrome capabilities', function () {
-  it('opens a page in headless mode', async function () {
-    await openBlankPage(new Chrome.Options().addArguments('--headless=new'));
+describe('FOTECTA no navegador', function () {
+  let driver;
+
+  beforeEach(async function () {
+    driver = await new Builder()
+      .forBrowser(Browser.CHROME)
+      .setChromeOptions(new Chrome.Options().addArguments('--headless=new'))
+      .build();
   });
 
-  it('excludes the enable-automation switch', async function () {
-    await openBlankPage(new Chrome.Options().excludeSwitches('enable-automation'));
+  afterEach(async function () {
+    if (driver) {
+      await driver.quit();
+      driver = null;
+    }
   });
 
-  it('accepts the detach capability', async function () {
-    await openBlankPage(new Chrome.Options().detachDriver(true));
+  it('abre a página inicial e mostra a apresentação do FOTECTA', async function () {
+    await driver.get(appUrl);
+
+    await driver.wait(until.elementLocated(By.id('titulo-principal')), waitTimeout);
+    assert.match(await driver.getTitle(), /FOTECTA/i);
+    assert.match(await driver.findElement(By.id('titulo-principal')).getText(), /Encontre o olhar/i);
   });
 
-  it('opens a page with the default Chrome options', async function () {
-    await openBlankPage(new Chrome.Options());
+  it('filtra fotógrafos por nome, especialidade e cidade na página', async function () {
+    await driver.get(`${appUrl}/#busca`);
+    await driver.wait(until.elementLocated(By.id('filtro-form')), waitTimeout);
+    await driver.findElement(By.id('busca-input')).sendKeys('Carlos');
+    await new Select(driver.findElement(By.id('especialidade'))).selectByVisibleText('Publicidade');
+    await driver.findElement(By.id('cidade')).sendKeys('Campinas');
+    await clickVisible(driver, '#filtro-form button[type="submit"]');
+
+    await driver.wait(async () => {
+      const status = await driver.findElement(By.id('busca-status')).getText();
+      return status === '1 fotógrafo(s) encontrado(s).';
+    }, waitTimeout);
+
+    const cards = await driver.findElements(By.css('#lista-profissionais .card'));
+    assert.equal(cards.length, 1);
+    assert.match(await cards[0].getText(), /Carlos Mendes/);
   });
 
-  it('loads the Selenium example extension', async function () {
-    await openBlankPage(new Chrome.Options().addExtensions(extensionPath));
+  it('autentica um cliente de demonstração e permite sair', async function () {
+    await driver.get(`${appUrl}/#login`);
+    await driver.wait(until.elementLocated(By.id('login-form')), waitTimeout);
+    await driver.findElement(By.id('login-email')).sendKeys('cliente@fotecta.com');
+    await driver.findElement(By.id('login-senha')).sendKeys('cliente123');
+    await clickVisible(driver, '#login-form button[type="submit"]');
+
+    await driver.wait(async () => (
+      await driver.findElement(By.id('dashboard-logado')).getAttribute('hidden') === null
+    ), waitTimeout);
+
+    assert.equal(await driver.findElement(By.id('dash-user-email')).getText(), 'cliente@fotecta.com');
+    await clickVisible(driver, '#btn-logout');
+
+    await driver.wait(until.elementLocated(By.css('#nav-auth a[href="#login"]')), waitTimeout);
+    assert.notEqual(await driver.findElement(By.id('dashboard-logado')).getAttribute('hidden'), null);
   });
 });
