@@ -103,6 +103,19 @@ Todas as páginas incluem controles para aumentar, diminuir e restaurar o tamanh
 npm test
 ```
 
+### Testes de navegador com Selenium
+
+Os exemplos de capacidades do Chrome podem ser executados separadamente. É necessário ter o Google Chrome instalado:
+
+```bash
+cd ".\projeto-integrador-DRP01-main"
+npm install
+npm run test:browser
+```
+
+O Selenium Manager localiza o driver do navegador. Os cenários usam a página de teste do Selenium e a extensão de exemplo mantida em `browser/resources/extensions/`. 
+O exemplo foi adaptado do [diretório de testes JavaScript do SeleniumHQ](https://github.com/SeleniumHQ/seleniumhq.github.io/tree/trunk/examples/javascript/test).
+
 ## Observação
 
 Esta versão foi migrada para JavaScript/Node para manter a mesma proposta do projeto original, com visual e fluxo funcional adaptados para execução local e uso didático.
